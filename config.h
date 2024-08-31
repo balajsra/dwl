@@ -101,7 +101,7 @@ LIBINPUT_CONFIG_TAP_MAP_LMR -- 1/2/3 finger tap maps to left/middle/right
 static const enum libinput_config_tap_button_map button_map = LIBINPUT_CONFIG_TAP_MAP_LRM;
 
 /* If you want to use the windows key for MODKEY, use WLR_MODIFIER_LOGO */
-#define MODKEY WLR_MODIFIER_ALT
+#define MODKEY WLR_MODIFIER_LOGO
 
 #define TAGKEYS(KEY,SKEY,TAG) \
 	{ MODKEY,                    KEY,            view,            {.ui = 1 << TAG} }, \
@@ -112,8 +112,8 @@ static const enum libinput_config_tap_button_map button_map = LIBINPUT_CONFIG_TA
 /* helper for spawning shell commands in the pre dwm-5.0 fashion */
 #define SHCMD(cmd) { .v = (const char*[]){ "/bin/sh", "-c", cmd, NULL } }
 
-static const char *termcmd[] = { "foot", NULL };
-static const char *menucmd[] = { "wmenu-run", NULL };
+static const char *termcmd[] = { "kitty", NULL };
+static const char *menucmd[] = { "wofi", "--show", "drun", NULL };
 
 static const Key keys[] = {
 	/* Note that Shift changes certain key codes: c -> C, 2 -> at, etc. */
