@@ -67,6 +67,7 @@
 #include <xcb/xcb_icccm.h>
 #endif
 
+#include "patches.h"
 #include "util.h"
 
 /* macros */
@@ -249,6 +250,9 @@ static void arrange(Monitor *m);
 static void arrangelayer(Monitor *m, struct wl_list *list,
 		struct wlr_box *usable_area, int exclusive);
 static void arrangelayers(Monitor *m);
+#if AUTOSTART_PATCH
+static void autostartexec(void);
+#endif // AUTOSTART_PATCH
 static void axisnotify(struct wl_listener *listener, void *data);
 static void buttonpress(struct wl_listener *listener, void *data);
 static void chvt(const Arg *arg);
@@ -432,6 +436,11 @@ static xcb_atom_t netatom[NetLast];
 /* attempt to encapsulate suck into one file */
 #include "client.h"
 
+#if AUTOSTART_PATCH
+static pid_t *autostart_pids;
+static size_t autostart_len;
+#endif // AUTOSTART_PATCH
+
 /* function implementations */
 void
 applybounds(Client *c, struct wlr_box *bbox)
@@ -580,6 +589,29 @@ arrangelayers(Monitor *m)
 	}
 }
 
+#if AUTOSTART_PATCH
+void
+autostartexec(void) {
+	const char *const *p;
+	size_t i = 0;
+
+	/* count entries */
+	for (p = autostart; *p; autostart_len++, p++)
+		while (*++p);
+
+	autostart_pids = calloc(autostart_len, sizeof(pid_t));
+	for (p = autostart; *p; i++, p++) {
+		if ((autostart_pids[i] = fork()) == 0) {
+			setsid();
+			execvp(*p, (char *const *)p);
+			die("dwl: execvp %s:", *p);
+		}
+		/* skip arguments */
+		while (*++p);
+	}
+}
+#endif // AUTOSTART_PATCH
+
 void
 axisnotify(struct wl_listener *listener, void *data)
 {
@@ -676,11 +708,25 @@ checkidleinhibitor(struct wlr_surface *exclude)
 void
 cleanup(void)
 {
+#if AUTOSTART_PATCH
+	size_t i;
+#endif // AUTOSTART_PATCH
 #ifdef XWAYLAND
 	wlr_xwayland_destroy(xwayland);
 	xwayland = NULL;
 #endif
 	wl_display_destroy_clients(dpy);
+
+#if AUTOSTART_PATCH
+	/* kill child processes */
+	for (i = 0; i < autostart_len; i++) {
+		if (0 < autostart_pids[i]) {
+			kill(autostart_pids[i], SIGTERM);
+			waitpid(autostart_pids[i], NULL, 0);
+		}
+	}
+#endif // AUTOSTART_PATCH
+
 	if (child_pid > 0) {
 		kill(-child_pid, SIGTERM);
 		waitpid(child_pid, NULL, 0);
@@ -1500,6 +1546,33 @@ void
 handlesig(int signo)
 {
 	if (signo == SIGCHLD) {
+#if AUTOSTART_PATCH
+		siginfo_t in;
+		/* wlroots expects to reap the XWayland process itself, so we
+		 * use WNOWAIT to keep the child waitable until we know it's not
+		 * XWayland.
+		 */
+		while (!waitid(P_ALL, 0, &in, WEXITED|WNOHANG|WNOWAIT) && in.si_pid
+#ifdef XWAYLAND
+			   && (!xwayland || in.si_pid != xwayland->server->pid)
+#endif
+			   ) {
+			pid_t *p, *lim;
+			waitpid(in.si_pid, NULL, 0);
+			if (in.si_pid == child_pid)
+				child_pid = -1;
+			if (!(p = autostart_pids))
+				continue;
+			lim = &p[autostart_len];
+
+			for (; p < lim; p++) {
+				if (*p == in.si_pid) {
+					*p = -1;
+					break;
+				}
+			}
+		}
+#else // AUTOSTART_PATCH
 #ifdef XWAYLAND
 		siginfo_t in;
 		/* wlroots expects to reap the XWayland process itself, so we
@@ -1507,11 +1580,12 @@ handlesig(int signo)
 		 * XWayland.
 		 */
 		while (!waitid(P_ALL, 0, &in, WEXITED|WNOHANG|WNOWAIT) && in.si_pid
-				&& (!xwayland || in.si_pid != xwayland->server->pid))
-			waitpid(in.si_pid, NULL, 0);
+			   && (!xwayland || in.si_pid != xwayland->server->pid))
+            waitpid(in.si_pid, NULL, 0);
 #else
-		while (waitpid(-1, NULL, WNOHANG) > 0);
+        while (waitpid(-1, NULL, WNOHANG) > 0);
 #endif
+#endif // AUTOSTART_PATCH
 	} else if (signo == SIGINT || signo == SIGTERM) {
 		quit(NULL);
 	}
@@ -2227,6 +2301,9 @@ run(char *startup_cmd)
 		die("startup: backend_start");
 
 	/* Now that the socket exists and the backend is started, run the startup command */
+#if AUTOSTART_PATCH
+	autostartexec();
+#endif // AUTOSTART_PATCH
 	if (startup_cmd) {
 		int piperw[2];
 		if (pipe(piperw) < 0)

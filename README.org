@@ -6,10 +6,13 @@
 * Table of Contents :TOC_3:noexport:
 - [[#welcome][Welcome]]
 - [[#dwl---dwm-for-wayland][dwl - dwm for Wayland]]
+- [[#patches][Patches]]
+  - [[#auto-start][Auto Start]]
 - [[#dwl-configuration][dwl Configuration]]
-  - [[#apearance][Apearance]]
+  - [[#appearance][Appearance]]
   - [[#tagging][Tagging]]
   - [[#logging][Logging]]
+  - [[#autostart][Autostart]]
   - [[#window-rules][Window Rules]]
   - [[#layouts][Layouts]]
   - [[#monitor-rules][Monitor Rules]]
@@ -41,11 +44,23 @@ sudo make clean install
 
 See [[./README.md][Upstream README]] for details on project.
 
+* Patches
+
+** [[https://codeberg.org/dwl/dwl-patches/src/branch/main/patches/autostart][Auto Start]]
+
+Allow dwl to execute commands from autostart array in your config.h file. And when you exit dwl all processes from autostart array will be killed.
+
+Note: Commands from array are executed using execvp(). So if you need to execute shell command you need to prefix it with "sh", "-c" (change sh to any shell you like).
+
+#+BEGIN_SRC c :tangle patches.def.h
+#define AUTOSTART_PATCH 1
+#+END_SRC
+
 * dwl Configuration
 
 Taken from https://github.com/djpohly/dwl/issues/466.
 
-** Apearance
+** Appearance
 
 #+BEGIN_SRC c :tangle config.h
 #define COLOR(hex)    { ((hex >> 24) & 0xFF) / 255.0f, \
@@ -77,6 +92,17 @@ static const float fullscreen_bg[]         = {0.1f, 0.1f, 0.1f, 1.0f}; /* You ca
 
 #+BEGIN_SRC c :tangle config.h
 static int log_level = WLR_ERROR;
+#+END_SRC
+
+** Autostart
+
+#+BEGIN_SRC c :tangle config.h
+#if AUTOSTART_PATCH
+static const char *const autostart[] = {
+        "wbg", "/path/to/your/image", NULL,
+        NULL /* terminate */
+};
+#endif // AUTOSTART_PATCH
 #+END_SRC
 
 ** Window Rules
