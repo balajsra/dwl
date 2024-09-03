@@ -107,6 +107,8 @@ static const char *const autostart[] = {
         "/usr/bin/syncthing-gtk", NULL,
         "/usr/bin/openrgb", NULL,
         "/usr/bin/udiskie", "-a", "-n", "-s", NULL,
+        "/usr/bin/shikane", NULL,
+        "/usr/bin/bash", "/home/sravan/.azotebg", NULL,
         NULL /* terminate */
 };
 #endif // AUTOSTART_PATCH
