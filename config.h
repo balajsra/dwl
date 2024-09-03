@@ -20,7 +20,14 @@ static int log_level = WLR_ERROR;
 
 #if AUTOSTART_PATCH
 static const char *const autostart[] = {
-        "wbg", "/path/to/your/image", NULL,
+        "/usr/libexec/polkit-gnome-authentication-agent-1", NULL,
+        "/usr/bin/kdeconnectd", "--replace", NULL,
+        "/usr/bin/foot", "-s", NULL,
+        "/usr/bin/bash", "/home/sravan/.scripts/dunst.sh", "--on", NULL,
+        "/usr/bin/nextcloud", NULL,
+        "/usr/bin/syncthing-gtk", NULL,
+        "/usr/bin/openrgb", NULL,
+        "/usr/bin/udiskie", "-a", "-n", "-s", NULL,
         NULL /* terminate */
 };
 #endif // AUTOSTART_PATCH
@@ -119,7 +126,7 @@ static const enum libinput_config_tap_button_map button_map = LIBINPUT_CONFIG_TA
 /* helper for spawning shell commands in the pre dwm-5.0 fashion */
 #define SHCMD(cmd) { .v = (const char*[]){ "/bin/sh", "-c", cmd, NULL } }
 
-static const char *termcmd[] = { "kitty", NULL };
+static const char *termcmd[] = { "footclient", NULL };
 static const char *menucmd[] = { "wofi", "--show", "drun", NULL };
 
 static const Key keys[] = {
