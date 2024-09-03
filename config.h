@@ -20,6 +20,8 @@ static int log_level = WLR_ERROR;
 
 #if AUTOSTART_PATCH
 static const char *const autostart[] = {
+        "/usr/bin/shikane", NULL,
+        "/usr/bin/bash", "/home/sravan/.azotebg", NULL,
         "/usr/libexec/polkit-gnome-authentication-agent-1", NULL,
         "/usr/bin/kdeconnectd", "--replace", NULL,
         "/usr/bin/foot", "-s", NULL,
@@ -28,8 +30,6 @@ static const char *const autostart[] = {
         "/usr/bin/syncthing-gtk", NULL,
         "/usr/bin/openrgb", NULL,
         "/usr/bin/udiskie", "-a", "-n", "-s", NULL,
-        "/usr/bin/shikane", NULL,
-        "/usr/bin/bash", "/home/sravan/.azotebg", NULL,
         NULL /* terminate */
 };
 #endif // AUTOSTART_PATCH
