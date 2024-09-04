@@ -29,6 +29,8 @@ static const char *const autostart[] = {
         "/usr/bin/syncthing-gtk", NULL,
         "/usr/bin/openrgb", NULL,
         "/usr/bin/udiskie", "-a", "-n", "-s", NULL,
+        "wl-paste", "--type", "text", "--watch", "cliphist", "store", NULL,
+        "wl-paste", "--type", "image", "--watch", "cliphist", "store", NULL,
         NULL /* terminate */
 };
 #endif // AUTOSTART_PATCH
@@ -127,14 +129,16 @@ static const enum libinput_config_tap_button_map button_map = LIBINPUT_CONFIG_TA
 /* helper for spawning shell commands in the pre dwm-5.0 fashion */
 #define SHCMD(cmd) { .v = (const char*[]){ "/bin/sh", "-c", cmd, NULL } }
 
-static const char *termcmd[] = { "kitty", NULL };
-static const char *menucmd[] = { "rofi", "-show", "combi", NULL };
+static const char *termcmd[]         = { "kitty", NULL };
+static const char *roficmd[]         = { "rofi", "-show", "combi", NULL };
+static const char *clipboardcmd[]    = { "cliphist", "list", "|", "rofi", "-dmenu", "|", "cliphist", "decode", "|", "wl-copy", NULL };
 
 static const Key keys[] = {
 	/* Note that Shift changes certain key codes: c -> C, 2 -> at, etc. */
 	/* modifier                  key                 function        argument */
-	{ MODKEY,                    XKB_KEY_p,          spawn,          {.v = menucmd} },
+	{ MODKEY,                    XKB_KEY_p,          spawn,          {.v = roficmd} },
 	{ MODKEY|WLR_MODIFIER_SHIFT, XKB_KEY_Return,     spawn,          {.v = termcmd} },
+	{ MODKEY|WLR_MODIFIER_CTRL,  XKB_KEY_c,          spawn,          {.v = clipboardcmd} },
 	{ MODKEY,                    XKB_KEY_j,          focusstack,     {.i = +1} },
 	{ MODKEY,                    XKB_KEY_k,          focusstack,     {.i = -1} },
 	{ MODKEY,                    XKB_KEY_i,          incnmaster,     {.i = +1} },
