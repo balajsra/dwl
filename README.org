@@ -7,6 +7,7 @@
 - [[#welcome][Welcome]]
 - [[#dwl---dwm-for-wayland][dwl - dwm for Wayland]]
 - [[#patches][Patches]]
+  - [[#attach-top][Attach Top]]
   - [[#auto-start][Auto Start]]
 - [[#dwl-configuration][dwl Configuration]]
   - [[#appearance][Appearance]]
@@ -45,6 +46,18 @@ sudo make clean install
 See [[./README.md][Upstream README]] for details on project.
 
 * Patches
+
+** [[https://codeberg.org/dwl/dwl-patches/src/branch/main/patches/attachtop][Attach Top]]
+
+This is a port of attachtop patch for dwm: https://dwm.suckless.org/patches/attachtop
+
+New client attaches below the last master/on top of the stack.
+
+Behavior feels very intuitive as it doesn't disrupt existing masters no matter the amount of them, it only pushes the clients in stack down.
+
+#+BEGIN_SRC c :tangle patches.def.h
+#define ATTACHTOP_PATCH 1
+#+END_SRC
 
 ** [[https://codeberg.org/dwl/dwl-patches/src/branch/main/patches/autostart][Auto Start]]
 
