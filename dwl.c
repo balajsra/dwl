@@ -355,6 +355,9 @@ static void urgent(struct wl_listener *listener, void *data);
 static void view(const Arg *arg);
 static void virtualkeyboard(struct wl_listener *listener, void *data);
 static void virtualpointer(struct wl_listener *listener, void *data);
+#if WARPCURSOR_PATCH
+static void warpcursor(const Client *c);
+#endif // WARPCURSOR_PATCH
 static Monitor *xytomon(double x, double y);
 static void xytonode(double x, double y, struct wlr_surface **psurface,
 		Client **pc, LayerSurface **pl, double *nx, double *ny);
@@ -528,6 +531,9 @@ arrange(Monitor *m)
 		m->lt[m->sellt]->arrange(m);
 	motionnotify(0, NULL, 0, 0, 0, 0);
 	checkidleinhibitor(NULL);
+#if WARPCURSOR_PATCH
+	warpcursor(focustop(selmon));
+#endif // WARPCURSOR_PATCH
 }
 
 void
@@ -1394,6 +1400,12 @@ focusclient(Client *c, int lift)
 
 	if (locked)
 		return;
+
+#if WARPCURSOR_PATCH
+	/* Warp cursor to center of client if it is outside */
+	if (lift)
+		warpcursor(c);
+#endif // WARPCURSOR_PATCH
 
 	/* Raise client in stacking order if requested */
 	if (c && lift)
@@ -3076,6 +3088,29 @@ virtualpointer(struct wl_listener *listener, void *data)
 	if (event->suggested_output)
 		wlr_cursor_map_input_to_output(cursor, device, event->suggested_output);
 }
+
+#if WARPCURSOR_PATCH
+void
+warpcursor(const Client *c) {
+	if (cursor_mode != CurNormal) {
+		return;
+	}
+	if (!c && selmon) {
+		wlr_cursor_warp_closest(cursor,
+			  NULL,
+			  selmon->w.x + selmon->w.width / 2.0 ,
+			  selmon->w.y + selmon->w.height / 2.0);
+	}
+	else if ( c && (cursor->x < c->geom.x ||
+		cursor->x > c->geom.x + c->geom.width ||
+		cursor->y < c->geom.y ||
+		cursor->y > c->geom.y + c->geom.height))
+		wlr_cursor_warp_closest(cursor,
+			  NULL,
+			  c->geom.x + c->geom.width / 2.0,
+			  c->geom.y + c->geom.height / 2.0);
+}
+#endif // WARPCURSOR_PATCH
 
 Monitor *
 xytomon(double x, double y)

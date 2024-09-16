@@ -9,6 +9,7 @@
 - [[#patches][Patches]]
   - [[#attach-top][Attach Top]]
   - [[#auto-start][Auto Start]]
+  - [[#warp-cursor][Warp Cursor]]
 - [[#dwl-configuration][dwl Configuration]]
   - [[#appearance][Appearance]]
   - [[#tagging][Tagging]]
@@ -68,6 +69,19 @@ Note: Commands from array are executed using execvp(). So if you need to execute
 #+BEGIN_SRC c :tangle patches.def.h
 #define AUTOSTART_PATCH 1
 #+END_SRC
+
+** [[https://codeberg.org/dwl/dwl-patches/src/branch/main/patches/warpcursor][Warp Cursor]]
+
+Warp cursor to the centre of newly focused clients.
+
+Only moves the cursor if the cursor is currently not on the new client.
+
+This is my version of the orphaned cursorwarp patch except I left out the config flag as I think it is unnecessary.
+
+#+BEGIN_SRC c :tangle patches.def.h
+#define WARPCURSOR_PATCH 1
+#+END_SRC
+
 
 * dwl Configuration
 
