@@ -2,4 +2,6 @@
 
 #define AUTOSTART_PATCH 1
 
+#define RESTORE_MONITOR_PATCH 1
+
 #define WARPCURSOR_PATCH 1

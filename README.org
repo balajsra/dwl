@@ -9,6 +9,7 @@
 - [[#patches][Patches]]
   - [[#attach-top][Attach Top]]
   - [[#auto-start][Auto Start]]
+  - [[#restore-monitor][Restore Monitor]]
   - [[#warp-cursor][Warp Cursor]]
 - [[#dwl-configuration][dwl Configuration]]
   - [[#appearance][Appearance]]
@@ -70,6 +71,14 @@ Note: Commands from array are executed using execvp(). So if you need to execute
 #define AUTOSTART_PATCH 1
 #+END_SRC
 
+** [[https://codeberg.org/dwl/dwl-patches/src/branch/main/patches/restore-monitor][Restore Monitor]]
+
+Moves clients to their old output when it is reattached.
+
+#+BEGIN_SRC c :tangle patches.def.h
+#define RESTORE_MONITOR_PATCH 1
+#+END_SRC
+
 ** [[https://codeberg.org/dwl/dwl-patches/src/branch/main/patches/warpcursor][Warp Cursor]]
 
 Warp cursor to the centre of newly focused clients.
@@ -81,7 +90,6 @@ This is my version of the orphaned cursorwarp patch except I left out the config
 #+BEGIN_SRC c :tangle patches.def.h
 #define WARPCURSOR_PATCH 1
 #+END_SRC
-
 
 * dwl Configuration
 
