@@ -10,6 +10,7 @@
   - [[#attach-top][Attach Top]]
   - [[#auto-start][Auto Start]]
   - [[#restore-monitor][Restore Monitor]]
+  - [[#vanity-gaps][Vanity Gaps]]
   - [[#warp-cursor][Warp Cursor]]
 - [[#dwl-configuration][dwl Configuration]]
   - [[#appearance][Appearance]]
@@ -79,6 +80,14 @@ Moves clients to their old output when it is reattached.
 #define RESTORE_MONITOR_PATCH 1
 #+END_SRC
 
+** [[https://codeberg.org/dwl/dwl-patches/src/branch/main/patches/vanitygaps][Vanity Gaps]]
+
+Adds (inner) gaps between client windows and (outer) gaps between windows and the screen edge in a flexible manner.
+
+#+BEGIN_SRC c :tangle patches.def.h
+#define VANITYGAPS_PATCH 1
+#+END_SRC
+
 ** [[https://codeberg.org/dwl/dwl-patches/src/branch/main/patches/warpcursor][Warp Cursor]]
 
 Warp cursor to the centre of newly focused clients.
@@ -107,7 +116,17 @@ Taken from https://github.com/djpohly/dwl/issues/466.
 #+BEGIN_SRC c :tangle config.h
 static const int sloppyfocus               = 1;  /* focus follows mouse */
 static const int bypass_surface_visibility = 0;  /* 1 means idle inhibitors will disable idle tracking even if it's surface isn't visible  */
+#if VANITYGAPS_PATCH
+static const int smartgaps                 = 0;  /* 1 means no outer gap when there is only one window */
+static const int monoclegaps               = 0;  /* 1 means outer gaps in monocle layout */
+#endif // VANITYGAPS_PATCH
 static const unsigned int borderpx         = 2;  /* border pixel of windows */
+#if VANITYGAPS_PATCH
+static const unsigned int gappih           = 20; /* horiz inner gap between windows */
+static const unsigned int gappiv           = 20; /* vert inner gap between windows */
+static const unsigned int gappoh           = 30; /* horiz outer gap between windows and screen edge */
+static const unsigned int gappov           = 30; /* vert outer gap between windows and screen edge */
+#endif // VANITYGAPS_PATCH
 static const float rootcolor[]             = COLOR(0x282a36ff);
 static const float bordercolor[]           = COLOR(0x4d4d4dff);
 static const float focuscolor[]            = COLOR(0xbd93f9ff);
@@ -285,6 +304,24 @@ static const Key keys[] = {
 	{ MODKEY,                    XKB_KEY_d,          incnmaster,     {.i = -1} },
 	{ MODKEY,                    XKB_KEY_h,          setmfact,       {.f = -0.05f} },
 	{ MODKEY,                    XKB_KEY_l,          setmfact,       {.f = +0.05f} },
+#if VANITYGAPS_PATCH
+    { MODKEY|WLR_MODIFIER_LOGO,  XKB_KEY_h,          incgaps,       {.i = +1 } },
+    { MODKEY|WLR_MODIFIER_LOGO,  XKB_KEY_l,          incgaps,       {.i = -1 } },
+	{ MODKEY|WLR_MODIFIER_LOGO|WLR_MODIFIER_SHIFT,   XKB_KEY_H,      incogaps,      {.i = +1 } },
+	{ MODKEY|WLR_MODIFIER_LOGO|WLR_MODIFIER_SHIFT,   XKB_KEY_L,      incogaps,      {.i = -1 } },
+	{ MODKEY|WLR_MODIFIER_LOGO|WLR_MODIFIER_CTRL,    XKB_KEY_h,      incigaps,      {.i = +1 } },
+	{ MODKEY|WLR_MODIFIER_LOGO|WLR_MODIFIER_CTRL,    XKB_KEY_l,      incigaps,      {.i = -1 } },
+	{ MODKEY|WLR_MODIFIER_LOGO,  XKB_KEY_0,          togglegaps,     {0} },
+	{ MODKEY|WLR_MODIFIER_LOGO|WLR_MODIFIER_SHIFT,   XKB_KEY_parenright,defaultgaps,    {0} },
+	{ MODKEY,                    XKB_KEY_y,          incihgaps,     {.i = +1 } },
+	{ MODKEY,                    XKB_KEY_o,          incihgaps,     {.i = -1 } },
+	{ MODKEY|WLR_MODIFIER_CTRL,  XKB_KEY_y,          incivgaps,     {.i = +1 } },
+	{ MODKEY|WLR_MODIFIER_CTRL,  XKB_KEY_o,          incivgaps,     {.i = -1 } },
+	{ MODKEY|WLR_MODIFIER_LOGO,  XKB_KEY_y,          incohgaps,     {.i = +1 } },
+	{ MODKEY|WLR_MODIFIER_LOGO,  XKB_KEY_o,          incohgaps,     {.i = -1 } },
+	{ MODKEY|WLR_MODIFIER_SHIFT, XKB_KEY_Y,          incovgaps,     {.i = +1 } },
+	{ MODKEY|WLR_MODIFIER_SHIFT, XKB_KEY_O,          incovgaps,     {.i = -1 } },
+#endif // VANITYGAPS_PATCH
 	{ MODKEY,                    XKB_KEY_Return,     zoom,           {0} },
 	{ MODKEY,                    XKB_KEY_Tab,        view,           {0} },
 	{ MODKEY|WLR_MODIFIER_SHIFT, XKB_KEY_C,          killclient,     {0} },

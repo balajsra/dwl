@@ -204,6 +204,12 @@ struct Monitor {
 	struct wlr_box w; /* window area, layout-relative */
 	struct wl_list layers[4]; /* LayerSurface.link */
 	const Layout *lt[2];
+#if VANITYGAPS_PATCH
+	int gappih;           /* horizontal gap between windows */
+	int gappiv;           /* vertical gap between windows */
+	int gappoh;           /* horizontal outer gaps */
+	int gappov;           /* vertical outer gaps */
+#endif // VANITYGAPS_PATCH
 	unsigned int seltags;
 	unsigned int sellt;
 	uint32_t tagset[2];
@@ -280,6 +286,9 @@ static void createpopup(struct wl_listener *listener, void *data);
 static void cursorconstrain(struct wlr_pointer_constraint_v1 *constraint);
 static void cursorframe(struct wl_listener *listener, void *data);
 static void cursorwarptohint(void);
+#if VANITYGAPS_PATCH
+static void defaultgaps(const Arg *arg);
+#endif // VANITYGAPS_PATCH
 static void destroydecoration(struct wl_listener *listener, void *data);
 static void destroydragicon(struct wl_listener *listener, void *data);
 static void destroyidleinhibitor(struct wl_listener *listener, void *data);
@@ -300,6 +309,15 @@ static void fullscreennotify(struct wl_listener *listener, void *data);
 static void gpureset(struct wl_listener *listener, void *data);
 static void handlesig(int signo);
 static void incnmaster(const Arg *arg);
+#if VANITYGAPS_PATCH
+static void incgaps(const Arg *arg);
+static void incigaps(const Arg *arg);
+static void incihgaps(const Arg *arg);
+static void incivgaps(const Arg *arg);
+static void incogaps(const Arg *arg);
+static void incohgaps(const Arg *arg);
+static void incovgaps(const Arg *arg);
+#endif // VANITYGAPS_PATCH
 static void inputdevice(struct wl_listener *listener, void *data);
 static int keybinding(uint32_t mods, xkb_keysym_t sym);
 static void keypress(struct wl_listener *listener, void *data);
@@ -334,6 +352,9 @@ static void setcursorshape(struct wl_listener *listener, void *data);
 static void setfloating(Client *c, int floating);
 static void setfullscreen(Client *c, int fullscreen);
 static void setgamma(struct wl_listener *listener, void *data);
+#if VANITYGAPS_PATCH
+static void setgaps(int oh, int ov, int ih, int iv);
+#endif // VANITYGAPS_PATCH
 static void setlayout(const Arg *arg);
 static void setmfact(const Arg *arg);
 static void setmon(Client *c, Monitor *m, uint32_t newtags);
@@ -347,6 +368,9 @@ static void tagmon(const Arg *arg);
 static void tile(Monitor *m);
 static void togglefloating(const Arg *arg);
 static void togglefullscreen(const Arg *arg);
+#if VANITYGAPS_PATCH
+static void togglegaps(const Arg *arg);
+#endif // VANITYGAPS_PATCH
 static void toggletag(const Arg *arg);
 static void toggleview(const Arg *arg);
 static void unlocksession(struct wl_listener *listener, void *data);
@@ -422,6 +446,10 @@ static struct wlr_output_layout *output_layout;
 static struct wlr_box sgeom;
 static struct wl_list mons;
 static Monitor *selmon;
+
+#if VANITYGAPS_PATCH
+static int enablegaps = 1;   /* enables gaps, used by togglegaps */
+#endif // VANITYGAPS_PATCH
 
 #ifdef XWAYLAND
 static void activatex11(struct wl_listener *listener, void *data);
@@ -1049,6 +1077,13 @@ createmon(struct wl_listener *listener, void *data)
 	for (i = 0; i < LENGTH(m->layers); i++)
 		wl_list_init(&m->layers[i]);
 
+#if VANITYGAPS_PATCH
+	m->gappih = gappih;
+	m->gappiv = gappiv;
+	m->gappoh = gappoh;
+	m->gappov = gappov;
+#endif // VANITYGAPS_PATCH
+
 	wlr_output_state_init(&state);
 	/* Initialize monitor state using configured rules */
 	m->tagset[0] = m->tagset[1] = 1;
@@ -1239,6 +1274,14 @@ cursorwarptohint(void)
 		wlr_seat_pointer_warp(active_constraint->seat, sx, sy);
 	}
 }
+
+#if VANITYGAPS_PATCH
+void
+defaultgaps(const Arg *arg)
+{
+	setgaps(gappoh, gappov, gappih, gappiv);
+}
+#endif // VANITYGAPS_PATCH
 
 void
 destroydecoration(struct wl_listener *listener, void *data)
@@ -1630,6 +1673,85 @@ incnmaster(const Arg *arg)
 	arrange(selmon);
 }
 
+#if VANITYGAPS_PATCH
+void
+incgaps(const Arg *arg)
+{
+	setgaps(
+		selmon->gappoh + arg->i,
+		selmon->gappov + arg->i,
+		selmon->gappih + arg->i,
+		selmon->gappiv + arg->i
+	);
+}
+
+void
+incigaps(const Arg *arg)
+{
+	setgaps(
+		selmon->gappoh,
+		selmon->gappov,
+		selmon->gappih + arg->i,
+		selmon->gappiv + arg->i
+	);
+}
+
+void
+incihgaps(const Arg *arg)
+{
+	setgaps(
+		selmon->gappoh,
+		selmon->gappov,
+		selmon->gappih + arg->i,
+		selmon->gappiv
+	);
+}
+
+void
+incivgaps(const Arg *arg)
+{
+	setgaps(
+		selmon->gappoh,
+		selmon->gappov,
+		selmon->gappih,
+		selmon->gappiv + arg->i
+	);
+}
+
+void
+incogaps(const Arg *arg)
+{
+	setgaps(
+		selmon->gappoh + arg->i,
+		selmon->gappov + arg->i,
+		selmon->gappih,
+		selmon->gappiv
+	);
+}
+
+void
+incohgaps(const Arg *arg)
+{
+	setgaps(
+		selmon->gappoh + arg->i,
+		selmon->gappov,
+		selmon->gappih,
+		selmon->gappiv
+	);
+}
+
+void
+incovgaps(const Arg *arg)
+{
+	setgaps(
+		selmon->gappoh,
+		selmon->gappov + arg->i,
+		selmon->gappih,
+		selmon->gappiv
+	);
+}
+#endif // VANITYGAPS_PATCH
+
 void
 inputdevice(struct wl_listener *listener, void *data)
 {
@@ -1902,8 +2024,17 @@ monocle(Monitor *m)
 	wl_list_for_each(c, &clients, link) {
 		if (!VISIBLEON(c, m) || c->isfloating || c->isfullscreen)
 			continue;
-		resize(c, m->w, 0);
+#if VANITYGAPS_PATCH
 		n++;
+		if (!monoclegaps)
+			resize(c, m->w, 0);
+		else
+			resize(c, (struct wlr_box){.x = m->w.x + gappoh, .y = m->w.y + gappov,
+				.width = m->w.width - 2 * gappoh, .height = m->w.height - 2 * gappov}, 0);
+#else // VANITYGAPS_PATCH
+        resize(c, m->w, 0);
+        n++;
+#endif // VANITYGAPS_PATCH
 	}
 	if (n)
 		snprintf(m->ltsymbol, LENGTH(m->ltsymbol), "[%d]", n);
@@ -2482,6 +2613,18 @@ setgamma(struct wl_listener *listener, void *data)
 	wlr_output_schedule_frame(m->wlr_output);
 }
 
+#if VANITYGAPS_PATCH
+void
+setgaps(int oh, int ov, int ih, int iv)
+{
+	selmon->gappoh = MAX(oh, 0);
+	selmon->gappov = MAX(ov, 0);
+	selmon->gappih = MAX(ih, 0);
+	selmon->gappiv = MAX(iv, 0);
+	arrange(selmon);
+}
+#endif // VANITYGAPS_PATCH
+
 void
 setlayout(const Arg *arg)
 {
@@ -2832,7 +2975,11 @@ tagmon(const Arg *arg)
 void
 tile(Monitor *m)
 {
+#if VANITYGAPS_PATCH
+	unsigned int mw, my, ty, h, r, oe = enablegaps, ie = enablegaps;
+#else // VANITYGAPS_PATCH
 	unsigned int mw, my, ty;
+#endif // VANITYGAPS_PATCH
 	int i, n = 0;
 	Client *c;
 
@@ -2842,22 +2989,54 @@ tile(Monitor *m)
 	if (n == 0)
 		return;
 
+#if VANITYGAPS_PATCH
+	if (smartgaps == n) {
+		oe = 0; // outer gaps disabled
+	}
+#endif // VANITYGAPS_PATCH
+
 	if (n > m->nmaster)
+#if VANITYGAPS_PATCH
+		mw = m->nmaster ? (int)roundf((m->w.width + m->gappiv*ie) * m->mfact) : 0;
+#else // VANITYGAPS_PATCH
 		mw = m->nmaster ? (int)roundf(m->w.width * m->mfact) : 0;
+#endif // VANITYGAPS_PATCH
 	else
-		mw = m->w.width;
-	i = my = ty = 0;
+#if VANITYGAPS_PATCH
+		mw = m->w.width - 2*m->gappov*oe + m->gappiv*ie;
+	i = 0;
+	my = ty = m->gappoh*oe;
+#else // VANITYGAPS_PATCH
+        mw = m->w.width;
+    i = my = ty = 0;
+#endif // VANITYGAPS_PATCH
 	wl_list_for_each(c, &clients, link) {
 		if (!VISIBLEON(c, m) || c->isfloating || c->isfullscreen)
 			continue;
 		if (i < m->nmaster) {
-			resize(c, (struct wlr_box){.x = m->w.x, .y = m->w.y + my, .width = mw,
-				.height = (m->w.height - my) / (MIN(n, m->nmaster) - i)}, 0);
-			my += c->geom.height;
+#if VANITYGAPS_PATCH
+			r = MIN(n, m->nmaster) - i;
+			h = (m->w.height - my - m->gappoh*oe - m->gappih*ie * (r - 1)) / r;
+			resize(c, (struct wlr_box){.x = m->w.x + m->gappov*oe, .y = m->w.y + my,
+				.width = mw - m->gappiv*ie, .height = h}, 0);
+			my += c->geom.height + m->gappih*ie;
+#else // VANITYGAPS_PATCH
+            resize(c, (struct wlr_box){.x = m->w.x, .y = m->w.y + my, .width = mw,
+                .height = (m->w.height - my) / (MIN(n, m->nmaster) - i)}, 0);
+            my += c->geom.height;
+#endif // VANITYGAPS_PATCH
 		} else {
-			resize(c, (struct wlr_box){.x = m->w.x + mw, .y = m->w.y + ty,
-				.width = m->w.width - mw, .height = (m->w.height - ty) / (n - i)}, 0);
-			ty += c->geom.height;
+#if VANITYGAPS_PATCH
+			r = n - i;
+			h = (m->w.height - ty - m->gappoh*oe - m->gappih*ie * (r - 1)) / r;
+			resize(c, (struct wlr_box){.x = m->w.x + mw + m->gappov*oe, .y = m->w.y + ty,
+				.width = m->w.width - mw - 2*m->gappov*oe, .height = h}, 0);
+			ty += c->geom.height + m->gappih*ie;
+#else // VANITYGAPS_PATCH
+            resize(c, (struct wlr_box){.x = m->w.x + mw, .y = m->w.y + ty,
+                .width = m->w.width - mw, .height = (m->w.height - ty) / (n - i)}, 0);
+            ty += c->geom.height;
+#endif // VANITYGAPS_PATCH
 		}
 		i++;
 	}
@@ -2879,6 +3058,15 @@ togglefullscreen(const Arg *arg)
 	if (sel)
 		setfullscreen(sel, !sel->isfullscreen);
 }
+
+#if VANITYGAPS_PATCH
+void
+togglegaps(const Arg *arg)
+{
+	enablegaps = !enablegaps;
+	arrange(selmon);
+}
+#endif // VANITYGAPS_PATCH
 
 void
 toggletag(const Arg *arg)
