@@ -65,7 +65,7 @@
 #include <wlr/xwayland.h>
 #include <xcb/xcb.h>
 #include <xcb/xcb_icccm.h>
-#endif
+#endif // XWAYLAND
 
 #include "patches.h"
 #include "util.h"
@@ -88,7 +88,7 @@ enum { LyrBg, LyrBottom, LyrTile, LyrFloat, LyrTop, LyrFS, LyrOverlay, LyrBlock,
 #ifdef XWAYLAND
 enum { NetWMWindowTypeDialog, NetWMWindowTypeSplash, NetWMWindowTypeToolbar,
 	NetWMWindowTypeUtility, NetLast }; /* EWMH atoms */
-#endif
+#endif // XWAYLAND
 
 typedef union {
 	int i;
@@ -140,7 +140,7 @@ typedef struct {
 	struct wl_listener dissociate;
 	struct wl_listener configure;
 	struct wl_listener set_hints;
-#endif
+#endif // XWAYLAND
 	unsigned int bw;
 	uint32_t tags;
 	int isfloating, isurgent, isfullscreen;
@@ -462,7 +462,7 @@ static void sethints(struct wl_listener *listener, void *data);
 static void xwaylandready(struct wl_listener *listener, void *data);
 static struct wlr_xwayland *xwayland;
 static xcb_atom_t netatom[NetLast];
-#endif
+#endif // XWAYLAND
 
 /* configuration, allows nested code to access above variables */
 #include "config.h"
@@ -751,7 +751,7 @@ cleanup(void)
 #ifdef XWAYLAND
 	wlr_xwayland_destroy(xwayland);
 	xwayland = NULL;
-#endif
+#endif // XWAYLAND
 	wl_display_destroy_clients(dpy);
 
 #if AUTOSTART_PATCH
@@ -1193,10 +1193,10 @@ createpointer(struct wlr_pointer *pointer)
 #endif // NATURALSCROLLTRACKPAD_PATCH
 		}
 
-#if ! NATURALSCROLLTRACKPAD_PATCH
+#if !NATURALSCROLLTRACKPAD_PATCH
 		if (libinput_device_config_scroll_has_natural_scroll(device))
 			libinput_device_config_scroll_set_natural_scroll_enabled(device, natural_scrolling);
-#endif // ! NATURALSCROLLTRACKPAD_PATCH
+#endif // NATURALSCROLLTRACKPAD_PATCH
 
 		if (libinput_device_config_dwt_is_available(device))
 			libinput_device_config_dwt_set_enabled(device, disable_while_typing);
@@ -1389,7 +1389,7 @@ destroynotify(struct wl_listener *listener, void *data)
 		wl_list_remove(&c->dissociate.link);
 		wl_list_remove(&c->set_hints.link);
 	} else
-#endif
+#endif // XWAYLAND
 	{
 		wl_list_remove(&c->commit.link);
 		wl_list_remove(&c->map.link);
@@ -1634,7 +1634,7 @@ handlesig(int signo)
 		while (!waitid(P_ALL, 0, &in, WEXITED|WNOHANG|WNOWAIT) && in.si_pid
 #ifdef XWAYLAND
 			   && (!xwayland || in.si_pid != xwayland->server->pid)
-#endif
+#endif // XWAYLAND
 			   ) {
 			pid_t *p, *lim;
 			waitpid(in.si_pid, NULL, 0);
@@ -1661,9 +1661,9 @@ handlesig(int signo)
 		while (!waitid(P_ALL, 0, &in, WEXITED|WNOHANG|WNOWAIT) && in.si_pid
 			   && (!xwayland || in.si_pid != xwayland->server->pid))
             waitpid(in.si_pid, NULL, 0);
-#else
+#else // XWAYLAND
         while (waitpid(-1, NULL, WNOHANG) > 0);
-#endif
+#endif // XWAYLAND
 #endif // AUTOSTART_PATCH
 	} else if (signo == SIGINT || signo == SIGTERM) {
 		quit(NULL);
@@ -1972,7 +1972,7 @@ mapnotify(struct wl_listener *listener, void *data)
 		wl_list_insert(&p->link, &c->link);
 	else
 		wl_list_insert(&clients, &c->link);
-#else
+#else // ATTACHTOP_PATCH
     wl_list_insert(&clients, &c->link);
 #endif // ATTACHTOP_PATCH
 	wl_list_insert(&fstack, &c->flink);
@@ -2921,7 +2921,7 @@ setup(void)
 	} else {
 		fprintf(stderr, "failed to setup XWayland X server, continuing without it\n");
 	}
-#endif
+#endif // XWAYLAND
 }
 
 void
@@ -3539,7 +3539,7 @@ xwaylandready(struct wl_listener *listener, void *data)
 
 	xcb_disconnect(xc);
 }
-#endif
+#endif // XWAYLAND
 
 int
 main(int argc, char *argv[])
