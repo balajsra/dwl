@@ -9,6 +9,7 @@
 - [[#patches][Patches]]
   - [[#attach-top][Attach Top]]
   - [[#auto-start][Auto Start]]
+  - [[#natural-scroll-trackpad][Natural Scroll Trackpad]]
   - [[#restore-monitor][Restore Monitor]]
   - [[#vanity-gaps][Vanity Gaps]]
   - [[#warp-cursor][Warp Cursor]]
@@ -70,6 +71,14 @@ Note: Commands from array are executed using execvp(). So if you need to execute
 
 #+BEGIN_SRC c :tangle patches.def.h
 #define AUTOSTART_PATCH 1
+#+END_SRC
+
+** [[https://codeberg.org/dwl/dwl-patches/src/branch/main/patches/naturalscrolltrackpad][Natural Scroll Trackpad]]
+
+Set natural scrolling only for trackpads.
+
+#+BEGIN_SRC c :tangle patches.def.h
+#define NATURALSCROLLTRACKPAD_PATCH 1
 #+END_SRC
 
 ** [[https://codeberg.org/dwl/dwl-patches/src/branch/main/patches/restore-monitor][Restore Monitor]]
@@ -231,7 +240,7 @@ static const int repeat_delay = 600;
 static const int tap_to_click = 1;
 static const int tap_and_drag = 1;
 static const int drag_lock = 1;
-static const int natural_scrolling = 0;
+static const int natural_scrolling = 1;
 static const int disable_while_typing = 1;
 static const int left_handed = 0;
 static const int middle_button_emulation = 0;
