@@ -73,6 +73,12 @@ static const struct xkb_rule_names xkb_rules = {
 	.options = NULL,
 };
 
+#if NUMLOCK_CAPSLOCK_PATCH
+/* numlock and capslock */
+static const int numlock = 1;
+static const int capslock = 0;
+#endif // NUMLOCK_CAPSLOCK_PATCH
+
 static const int repeat_rate = 25;
 static const int repeat_delay = 600;
 

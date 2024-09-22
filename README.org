@@ -11,6 +11,7 @@
   - [[#auto-start][Auto Start]]
   - [[#foreign-toplevel-management][Foreign Toplevel Management]]
   - [[#natural-scroll-trackpad][Natural Scroll Trackpad]]
+  - [[#numlock-capslock][Numlock Capslock]]
   - [[#per-tag][Per Tag]]
   - [[#restore-monitor][Restore Monitor]]
   - [[#vanity-gaps][Vanity Gaps]]
@@ -89,6 +90,14 @@ Set natural scrolling only for trackpads.
 
 #+BEGIN_SRC c :tangle patches.def.h
 #define NATURALSCROLLTRACKPAD_PATCH 1
+#+END_SRC
+
+** [[https://codeberg.org/dwl/dwl-patches/src/branch/main/patches/numlock-capslock][Numlock Capslock]]
+
+Allows activating numlock or capslock at startup.
+
+#+BEGIN_SRC c :tangle patches.def.h
+#define NUMLOCK_CAPSLOCK_PATCH 1
 #+END_SRC
 
 ** [[https://codeberg.org/dwl/dwl-patches/src/branch/main/patches/pertag][Per Tag]]
@@ -257,6 +266,12 @@ static const struct xkb_rule_names xkb_rules = {
 	,*/
 	.options = NULL,
 };
+
+#if NUMLOCK_CAPSLOCK_PATCH
+/* numlock and capslock */
+static const int numlock = 1;
+static const int capslock = 0;
+#endif // NUMLOCK_CAPSLOCK_PATCH
 
 static const int repeat_rate = 25;
 static const int repeat_delay = 600;
