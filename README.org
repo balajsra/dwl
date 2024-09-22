@@ -10,6 +10,7 @@
   - [[#attach-top][Attach Top]]
   - [[#auto-start][Auto Start]]
   - [[#natural-scroll-trackpad][Natural Scroll Trackpad]]
+  - [[#per-tag][Per Tag]]
   - [[#restore-monitor][Restore Monitor]]
   - [[#vanity-gaps][Vanity Gaps]]
   - [[#warp-cursor][Warp Cursor]]
@@ -79,6 +80,14 @@ Set natural scrolling only for trackpads.
 
 #+BEGIN_SRC c :tangle patches.def.h
 #define NATURALSCROLLTRACKPAD_PATCH 1
+#+END_SRC
+
+** [[https://codeberg.org/dwl/dwl-patches/src/branch/main/patches/pertag][Per Tag]]
+
+Makes layout, mwfact and nmaster individual for every tag.
+
+#+BEGIN_SRC c :tangle patches.def.h
+#define PERTAG_PATCH 1
 #+END_SRC
 
 ** [[https://codeberg.org/dwl/dwl-patches/src/branch/main/patches/restore-monitor][Restore Monitor]]

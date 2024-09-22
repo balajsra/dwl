@@ -104,6 +104,9 @@ typedef struct {
 	const Arg arg;
 } Button;
 
+#if PERTAG_PATCH
+typedef struct Pertag Pertag;
+#endif // PERTAG_PATCH
 typedef struct Monitor Monitor;
 typedef struct {
 	/* Must keep these three elements in this order */
@@ -204,6 +207,9 @@ struct Monitor {
 	struct wlr_box w; /* window area, layout-relative */
 	struct wl_list layers[4]; /* LayerSurface.link */
 	const Layout *lt[2];
+#if PERTAG_PATCH
+	Pertag *pertag;
+#endif // PERTAG_PATCH
 #if VANITYGAPS_PATCH
 	int gappih;           /* horizontal gap between windows */
 	int gappiv;           /* vertical gap between windows */
@@ -469,6 +475,16 @@ static xcb_atom_t netatom[NetLast];
 
 /* attempt to encapsulate suck into one file */
 #include "client.h"
+
+#if PERTAG_PATCH
+struct Pertag {
+	unsigned int curtag, prevtag; /* current and previous tag */
+	int nmasters[TAGCOUNT + 1]; /* number of windows in master area */
+	float mfacts[TAGCOUNT + 1]; /* mfacts per tag */
+	unsigned int sellts[TAGCOUNT + 1]; /* selected layouts */
+	const Layout *ltidxs[TAGCOUNT + 1][2]; /* matrix of tags and layouts indexes  */
+};
+#endif // PERTAG_PATCH
 
 #if AUTOSTART_PATCH
 static pid_t *autostart_pids;
@@ -803,6 +819,9 @@ cleanupmon(struct wl_listener *listener, void *data)
 	wlr_output_layout_remove(output_layout, m->wlr_output);
 	wlr_scene_output_destroy(m->scene_output);
 
+#if PERTAG_PATCH
+    free(m->pertag);
+#endif // PERTAG_PATCH
 	closemon(m);
 	wlr_scene_node_destroy(&m->fullscreen_bg->node);
 	free(m);
@@ -1119,6 +1138,20 @@ createmon(struct wl_listener *listener, void *data)
 
 	wl_list_insert(&mons, &m->link);
 	printstatus();
+
+#if PERTAG_PATCH
+	m->pertag = calloc(1, sizeof(Pertag));
+	m->pertag->curtag = m->pertag->prevtag = 1;
+
+	for (i = 0; i <= TAGCOUNT; i++) {
+		m->pertag->nmasters[i] = m->nmaster;
+		m->pertag->mfacts[i] = m->mfact;
+
+		m->pertag->ltidxs[i][0] = m->lt[0];
+		m->pertag->ltidxs[i][1] = m->lt[1];
+		m->pertag->sellts[i] = m->sellt;
+	}
+#endif // PERTAG_PATCH
 
 	/* The xdg-protocol specifies:
 	 *
@@ -1675,7 +1708,11 @@ incnmaster(const Arg *arg)
 {
 	if (!arg || !selmon)
 		return;
+#if !PERTAG_PATCH
 	selmon->nmaster = MAX(selmon->nmaster + arg->i, 0);
+#else // PERTAG_PATCH
+	selmon->nmaster = selmon->pertag->nmasters[selmon->pertag->curtag] = MAX(selmon->nmaster + arg->i, 0);
+#endif // PERTAG_PATCH
 	arrange(selmon);
 }
 
@@ -2637,9 +2674,17 @@ setlayout(const Arg *arg)
 	if (!selmon)
 		return;
 	if (!arg || !arg->v || arg->v != selmon->lt[selmon->sellt])
+#if !PERTAG_PATCH
 		selmon->sellt ^= 1;
+#else // PERTAG_PATCH
+		selmon->sellt = selmon->pertag->sellts[selmon->pertag->curtag] ^= 1;
+#endif // PERTAG_PATCH
 	if (arg && arg->v)
+#if !PERTAG_PATCH
 		selmon->lt[selmon->sellt] = (Layout *)arg->v;
+#else // PERTAG_PATCH
+		selmon->lt[selmon->sellt] = selmon->pertag->ltidxs[selmon->pertag->curtag][selmon->sellt] = (Layout *)arg->v;
+#endif // PERTAG_PATCH
 	strncpy(selmon->ltsymbol, selmon->lt[selmon->sellt]->symbol, LENGTH(selmon->ltsymbol));
 	arrange(selmon);
 	printstatus();
@@ -2656,7 +2701,11 @@ setmfact(const Arg *arg)
 	f = arg->f < 1.0f ? arg->f + selmon->mfact : arg->f - 1.0f;
 	if (f < 0.1 || f > 0.9)
 		return;
+#if !PERTAG_PATCH
 	selmon->mfact = f;
+#else // PERTAG_PATCH
+	selmon->mfact = selmon->pertag->mfacts[selmon->pertag->curtag] = f;
+#endif // PERTAG_PATCH
 	arrange(selmon);
 }
 
@@ -3092,8 +3141,32 @@ void
 toggleview(const Arg *arg)
 {
 	uint32_t newtagset;
+#if PERTAG_PATCH
+	size_t i;
+#endif // PERTAG_PATCH
 	if (!(newtagset = selmon ? selmon->tagset[selmon->seltags] ^ (arg->ui & TAGMASK) : 0))
 		return;
+
+#if PERTAG_PATCH
+	if (newtagset == (uint32_t)~0) {
+		selmon->pertag->prevtag = selmon->pertag->curtag;
+		selmon->pertag->curtag = 0;
+	}
+
+	/* test if the user did not select the same tag */
+	if (!(newtagset & 1 << (selmon->pertag->curtag - 1))) {
+		selmon->pertag->prevtag = selmon->pertag->curtag;
+		for (i = 0; !(newtagset & 1 << i); i++) ;
+		selmon->pertag->curtag = i + 1;
+	}
+
+	/* apply settings for this view */
+	selmon->nmaster = selmon->pertag->nmasters[selmon->pertag->curtag];
+	selmon->mfact = selmon->pertag->mfacts[selmon->pertag->curtag];
+	selmon->sellt = selmon->pertag->sellts[selmon->pertag->curtag];
+	selmon->lt[selmon->sellt] = selmon->pertag->ltidxs[selmon->pertag->curtag][selmon->sellt];
+	selmon->lt[selmon->sellt^1] = selmon->pertag->ltidxs[selmon->pertag->curtag][selmon->sellt^1];
+#endif // PERTAG_PATCH
 
 	selmon->tagset[selmon->seltags] = newtagset;
 	focusclient(focustop(selmon), 1);
@@ -3283,11 +3356,40 @@ urgent(struct wl_listener *listener, void *data)
 void
 view(const Arg *arg)
 {
+#if PERTAG_PATCH
+	size_t i, tmptag;
+#endif // PERTAG_PATCH
+       //
 	if (!selmon || (arg->ui & TAGMASK) == selmon->tagset[selmon->seltags])
 		return;
 	selmon->seltags ^= 1; /* toggle sel tagset */
+#if !PERTAG_PATCH
 	if (arg->ui & TAGMASK)
 		selmon->tagset[selmon->seltags] = arg->ui & TAGMASK;
+#else // PERTAG_PATCH
+	if (arg->ui & ~0) {
+		selmon->tagset[selmon->seltags] = arg->ui & TAGMASK;
+		selmon->pertag->prevtag = selmon->pertag->curtag;
+
+		if (arg->ui == TAGMASK)
+			selmon->pertag->curtag = 0;
+		else {
+			for (i = 0; !(arg->ui & 1 << i); i++) ;
+			selmon->pertag->curtag = i + 1;
+		}
+	} else {
+		tmptag = selmon->pertag->prevtag;
+		selmon->pertag->prevtag = selmon->pertag->curtag;
+		selmon->pertag->curtag = tmptag;
+	}
+
+	selmon->nmaster = selmon->pertag->nmasters[selmon->pertag->curtag];
+	selmon->mfact = selmon->pertag->mfacts[selmon->pertag->curtag];
+	selmon->sellt = selmon->pertag->sellts[selmon->pertag->curtag];
+	selmon->lt[selmon->sellt] = selmon->pertag->ltidxs[selmon->pertag->curtag][selmon->sellt];
+	selmon->lt[selmon->sellt^1] = selmon->pertag->ltidxs[selmon->pertag->curtag][selmon->sellt^1];
+#endif // PERTAG_PATCH
+
 	focusclient(focustop(selmon), 1);
 	arrange(selmon);
 	printstatus();
