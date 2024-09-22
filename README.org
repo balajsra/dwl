@@ -180,17 +180,27 @@ static int log_level = WLR_ERROR;
 #+BEGIN_SRC c :tangle config.h
 #if AUTOSTART_PATCH
 static const char *const autostart[] = {
+        /* Display / Compositor Setup */
         "/usr/bin/shikane", NULL,
         "/usr/bin/bash", "/home/sravan/.azotebg", NULL,
+        "/usr/bin/gammastep", "-x", NULL,
+        /* Background Processes */
         "/usr/libexec/polkit-gnome-authentication-agent-1", NULL,
         "/usr/bin/kdeconnectd", "--replace", NULL,
         "/usr/bin/bash", "/home/sravan/.scripts/dunst.sh", "--on", NULL,
+        "/usr/bin/wl-paste", "--type", "text", "--watch", "cliphist", "store", NULL,
+        "/usr/bin/wl-paste", "--type", "image", "--watch", "cliphist", "store", NULL,
+        /* Tray Applications */
+        "/usr/bin/gammastep-indicator", NULL,
+        "/usr/bin/blueman-applet", NULL,
+        "/usr/bin/nm-applet", NULL,
+        "/usr/bin/kdeconnect-indicator", NULL,
+        "/usr/bin/flameshot", NULL,
+        "/usr/bin/udiskie", "-a", "-n", "-s", NULL,
+        /* GUI Applications */
         "/usr/bin/nextcloud", NULL,
         "/usr/bin/syncthing-gtk", NULL,
         "/usr/bin/openrgb", NULL,
-        "/usr/bin/udiskie", "-a", "-n", "-s", NULL,
-        "wl-paste", "--type", "text", "--watch", "cliphist", "store", NULL,
-        "wl-paste", "--type", "image", "--watch", "cliphist", "store", NULL,
         NULL /* terminate */
 };
 #endif // AUTOSTART_PATCH
