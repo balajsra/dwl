@@ -21,6 +21,7 @@ dwl: dwl.o util.o
 	$(CC) dwl.o util.o $(DWLCFLAGS) $(LDFLAGS) $(LDLIBS) -o $@
 dwl.o: dwl.c client.h config.h config.mk patches.h cursor-shape-v1-protocol.h \
 	pointer-constraints-unstable-v1-protocol.h wlr-layer-shell-unstable-v1-protocol.h \
+	wlr-foreign-toplevel-management-unstable-v1-protocol.h \
 	wlr-output-power-management-unstable-v1-protocol.h xdg-shell-protocol.h
 util.o: util.c util.h
 
@@ -45,6 +46,9 @@ wlr-output-power-management-unstable-v1-protocol.h:
 xdg-shell-protocol.h:
 	$(WAYLAND_SCANNER) server-header \
 		$(WAYLAND_PROTOCOLS)/stable/xdg-shell/xdg-shell.xml $@
+wlr-foreign-toplevel-management-unstable-v1-protocol.h:
+	$(WAYLAND_SCANNER) server-header \
+		protocols/wlr-foreign-toplevel-management-unstable-v1.xml $@
 
 config.h:
 	cp config.def.h $@

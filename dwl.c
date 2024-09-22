@@ -1,6 +1,7 @@
 /*
  * See LICENSE file for copyright and license details.
  */
+#include "patches.h"
 #include <getopt.h>
 #include <libinput.h>
 #include <linux/input-event-codes.h>
@@ -24,6 +25,9 @@
 #include <wlr/types/wlr_data_device.h>
 #include <wlr/types/wlr_drm.h>
 #include <wlr/types/wlr_export_dmabuf_v1.h>
+#if FOREIGN_TOPLEVEL_MANAGEMENT_PATCH
+#include <wlr/types/wlr_foreign_toplevel_management_v1.h>
+#endif // FOREIGN_TOPLEVEL_MANAGEMENT_PATCH
 #include <wlr/types/wlr_fractional_scale_v1.h>
 #include <wlr/types/wlr_gamma_control_v1.h>
 #include <wlr/types/wlr_idle_inhibit_v1.h>
@@ -67,7 +71,6 @@
 #include <xcb/xcb_icccm.h>
 #endif // XWAYLAND
 
-#include "patches.h"
 #include "util.h"
 
 /* macros */
@@ -135,6 +138,13 @@ typedef struct {
 	struct wl_listener fullscreen;
 	struct wl_listener set_decoration_mode;
 	struct wl_listener destroy_decoration;
+#if FOREIGN_TOPLEVEL_MANAGEMENT_PATCH
+	struct wlr_foreign_toplevel_handle_v1 *foreign_toplevel;
+	struct wl_listener factivate;
+	struct wl_listener fclose;
+	struct wl_listener ffullscreen;
+	struct wl_listener fdestroy;
+#endif // FOREIGN_TOPLEVEL_MANAGEMENT_PATCH
 	struct wlr_box prev; /* layout-relative, includes border */
 	struct wlr_box bounds;
 #ifdef XWAYLAND
@@ -395,6 +405,13 @@ static Monitor *xytomon(double x, double y);
 static void xytonode(double x, double y, struct wlr_surface **psurface,
 		Client **pc, LayerSurface **pl, double *nx, double *ny);
 static void zoom(const Arg *arg);
+#if FOREIGN_TOPLEVEL_MANAGEMENT_PATCH
+static void createforeigntoplevel(Client *c);
+static void factivatenotify(struct wl_listener *listener, void *data);
+static void fclosenotify(struct wl_listener *listener, void *data);
+static void fdestroynotify(struct wl_listener *listener, void *data);
+static void ffullscreennotify(struct wl_listener *listener, void *data);
+#endif // FOREIGN_TOPLEVEL_MANAGEMENT_PATCH
 
 /* variables */
 static const char broken[] = "broken";
@@ -441,6 +458,10 @@ static struct wlr_session_lock_manager_v1 *session_lock_mgr;
 static struct wlr_scene_rect *locked_bg;
 static struct wlr_session_lock_v1 *cur_lock;
 static struct wl_listener lock_listener = {.notify = locksession};
+
+#if FOREIGN_TOPLEVEL_MANAGEMENT_PATCH
+static struct wlr_foreign_toplevel_manager_v1 *foreign_toplevel_mgr;
+#endif // FOREIGN_TOPLEVEL_MANAGEMENT_PATCH
 
 static struct wlr_seat *seat;
 static KeyboardGroup *kb_group;
@@ -524,6 +545,13 @@ applyrules(Client *c)
 		appid = broken;
 	if (!(title = client_get_title(c)))
 		title = broken;
+
+#if FOREIGN_TOPLEVEL_MANAGEMENT_PATCH
+	if (c->foreign_toplevel) {
+		wlr_foreign_toplevel_handle_v1_set_app_id(c->foreign_toplevel, appid);
+		wlr_foreign_toplevel_handle_v1_set_title(c->foreign_toplevel, title);
+	}
+#endif // FOREIGN_TOPLEVEL_MANAGEMENT_PATCH
 
 	for (r = rules; r < END(rules); r++) {
 		if ((!r->title || strstr(title, r->title))
@@ -1551,6 +1579,10 @@ focusclient(Client *c, int lift)
 			client_set_border_color(old_c, bordercolor);
 
 			client_activate_surface(old, 0);
+#if FOREIGN_TOPLEVEL_MANAGEMENT_PATCH
+			if (old_c->foreign_toplevel)
+				wlr_foreign_toplevel_handle_v1_set_activated(old_c->foreign_toplevel, 0);
+#endif // FOREIGN_TOPLEVEL_MANAGEMENT_PATCH
 		}
 	}
 	printstatus();
@@ -1569,6 +1601,10 @@ focusclient(Client *c, int lift)
 
 	/* Activate the new client */
 	client_activate_surface(client_surface(c), 1);
+#if FOREIGN_TOPLEVEL_MANAGEMENT_PATCH
+	if (c->foreign_toplevel)
+		wlr_foreign_toplevel_handle_v1_set_activated(c->foreign_toplevel, 1);
+#endif // FOREIGN_TOPLEVEL_MANAGEMENT_PATCH
 }
 
 void
@@ -1989,6 +2025,10 @@ mapnotify(struct wl_listener *listener, void *data)
 				c->isurgent ? urgentcolor : bordercolor);
 		c->border[i]->node.data = c;
 	}
+
+#if FOREIGN_TOPLEVEL_MANAGEMENT_PATCH
+	createforeigntoplevel(c);
+#endif // FOREIGN_TOPLEVEL_MANAGEMENT_PATCH
 
 	/* Initialize client geometry with room for border */
 	client_set_tiled(c, WLR_EDGE_TOP | WLR_EDGE_BOTTOM | WLR_EDGE_LEFT | WLR_EDGE_RIGHT);
@@ -2720,12 +2760,24 @@ setmon(Client *c, Monitor *m, uint32_t newtags)
 	c->prev = c->geom;
 
 	/* Scene graph sends surface leave/enter events on move and resize */
+#if !FOREIGN_TOPLEVEL_MANAGEMENT_PATCH
 	if (oldmon)
 		arrange(oldmon);
+#else // FOREIGN_TOPLEVEL_MANAGEMENT_PATCH
+	if (oldmon) {
+		if (c->foreign_toplevel)
+			wlr_foreign_toplevel_handle_v1_output_leave(c->foreign_toplevel, oldmon->wlr_output);
+		arrange(oldmon);
+    }
+#endif // FOREIGN_TOPLEVEL_MANAGEMENT_PATCH
 	if (m) {
 		/* Make sure window actually overlaps with the monitor */
 		resize(c, c->geom, 0);
 		c->tags = newtags ? newtags : m->tagset[m->seltags]; /* assign tags of target monitor */
+#if FOREIGN_TOPLEVEL_MANAGEMENT_PATCH
+        if (c->foreign_toplevel)
+            wlr_foreign_toplevel_handle_v1_output_enter(c->foreign_toplevel, m->wlr_output);
+#endif // FOREIGN_TOPLEVEL_MANAGEMENT_PATCH
 		setfullscreen(c, c->isfullscreen); /* This will call arrange(c->mon) */
 		setfloating(c, c->isfloating);
 	}
@@ -2842,6 +2894,11 @@ setup(void)
 
 	power_mgr = wlr_output_power_manager_v1_create(dpy);
 	LISTEN_STATIC(&power_mgr->events.set_mode, powermgrsetmode);
+
+#if FOREIGN_TOPLEVEL_MANAGEMENT_PATCH
+	/* Initializes foreign toplevel management */
+	foreign_toplevel_mgr = wlr_foreign_toplevel_manager_v1_create(dpy);
+#endif // FOREIGN_TOPLEVEL_MANAGEMENT_PATCH
 
 	/* Creates an output layout, which a wlroots utility for working with an
 	 * arrangement of screens in a physical layout. */
@@ -3218,6 +3275,13 @@ unmapnotify(struct wl_listener *listener, void *data)
 		wl_list_remove(&c->flink);
 	}
 
+#if FOREIGN_TOPLEVEL_MANAGEMENT_PATCH
+	if (c->foreign_toplevel) {
+		wlr_foreign_toplevel_handle_v1_destroy(c->foreign_toplevel);
+		c->foreign_toplevel = NULL;
+	}
+#endif // FOREIGN_TOPLEVEL_MANAGEMENT_PATCH
+
 	wlr_scene_node_destroy(&c->scene->node);
 	printstatus();
 	motionnotify(0, NULL, 0, 0, 0, 0);
@@ -3333,6 +3397,14 @@ void
 updatetitle(struct wl_listener *listener, void *data)
 {
 	Client *c = wl_container_of(listener, c, set_title);
+#if FOREIGN_TOPLEVEL_MANAGEMENT_PATCH
+	if (c->foreign_toplevel) {
+		const char *title;
+		if (!(title = client_get_title(c)))
+			title = broken;
+		wlr_foreign_toplevel_handle_v1_set_title(c->foreign_toplevel, title);
+	}
+#endif // FOREIGN_TOPLEVEL_MANAGEMENT_PATCH
 	if (c == focustop(c->mon))
 		printstatus();
 }
@@ -3513,6 +3585,56 @@ zoom(const Arg *arg)
 	focusclient(sel, 1);
 	arrange(selmon);
 }
+
+#if FOREIGN_TOPLEVEL_MANAGEMENT_PATCH
+void
+createforeigntoplevel(Client *c)
+{
+	c->foreign_toplevel = wlr_foreign_toplevel_handle_v1_create(foreign_toplevel_mgr);
+
+	LISTEN(&c->foreign_toplevel->events.request_activate, &c->factivate, factivatenotify);
+	LISTEN(&c->foreign_toplevel->events.request_close, &c->fclose, fclosenotify);
+	LISTEN(&c->foreign_toplevel->events.request_fullscreen, &c->ffullscreen, ffullscreennotify);
+	LISTEN(&c->foreign_toplevel->events.destroy, &c->fdestroy, fdestroynotify);
+}
+
+void
+factivatenotify(struct wl_listener *listener, void *data)
+{
+	Client *c = wl_container_of(listener, c, factivate);
+	if (c->mon == selmon) {
+		c->tags = c->mon->tagset[c->mon->seltags];
+	} else {
+		setmon(c, selmon, 0);
+	}
+	focusclient(c, 1);
+	arrange(c->mon);
+}
+
+void
+fclosenotify(struct wl_listener *listener, void *data)
+{
+	Client *c = wl_container_of(listener, c, fclose);
+	client_send_close(c);
+}
+
+void
+ffullscreennotify(struct wl_listener *listener, void *data) {
+	Client *c = wl_container_of(listener, c, ffullscreen);
+	struct wlr_foreign_toplevel_handle_v1_fullscreen_event *event = data;
+	setfullscreen(c, event->fullscreen);
+}
+
+void
+fdestroynotify(struct wl_listener *listener, void *data)
+{
+	Client *c = wl_container_of(listener, c, fdestroy);
+	wl_list_remove(&c->factivate.link);
+	wl_list_remove(&c->fclose.link);
+	wl_list_remove(&c->ffullscreen.link);
+	wl_list_remove(&c->fdestroy.link);
+}
+#endif // FOREIGN_TOPLEVEL_MANAGEMENT_PATCH
 
 #ifdef XWAYLAND
 void

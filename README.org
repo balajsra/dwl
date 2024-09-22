@@ -9,6 +9,7 @@
 - [[#patches][Patches]]
   - [[#attach-top][Attach Top]]
   - [[#auto-start][Auto Start]]
+  - [[#foreign-toplevel-management][Foreign Toplevel Management]]
   - [[#natural-scroll-trackpad][Natural Scroll Trackpad]]
   - [[#per-tag][Per Tag]]
   - [[#restore-monitor][Restore Monitor]]
@@ -72,6 +73,14 @@ Note: Commands from array are executed using execvp(). So if you need to execute
 
 #+BEGIN_SRC c :tangle patches.def.h
 #define AUTOSTART_PATCH 1
+#+END_SRC
+
+** [[https://codeberg.org/dwl/dwl-patches/src/branch/main/patches/foreign-toplevel-management][Foreign Toplevel Management]]
+
+Implement ~foreign-toplevel-management~, it add handlers for activate, close, fullscreen and destroy request events, it's missing minimize and maximize request handlers.
+
+#+BEGIN_SRC c :tangle patches.def.h
+#define FOREIGN_TOPLEVEL_MANAGEMENT_PATCH 1
 #+END_SRC
 
 ** [[https://codeberg.org/dwl/dwl-patches/src/branch/main/patches/naturalscrolltrackpad][Natural Scroll Trackpad]]
