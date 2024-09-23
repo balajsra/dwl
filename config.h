@@ -28,6 +28,20 @@ static const float fullscreen_bg[]         = {0.1f, 0.1f, 0.1f, 1.0f}; /* You ca
 
 static int log_level = WLR_ERROR;
 
+#if SETUPENV_PATCH
+static const Env envs[] = {
+	/* variable                      value */
+	{ "TERM",                        "xterm-256color" },
+	{ "SHELL",                       "/bin/fish" },
+	{ "EDITOR",                      "emacs" },
+	{ "GIT_EDITOR",                  "emacs" },
+	{ "BROWSER",                     "vivaldi-stable" },
+	{ "QT_QPA_PLATFORMTHEME",        "qt6ct" },
+	{ "_JAVA_AWT_WM_NONREPARENTING", "1" },
+	{ "XDG_CURRENT_DESKTOP",         "wlroots" },
+};
+#endif // SETUPENV_PATCH
+
 #if AUTOSTART_PATCH
 static const char *const autostart[] = {
         /* Display / Compositor Setup */

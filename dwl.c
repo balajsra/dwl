@@ -276,6 +276,13 @@ typedef struct {
 	int monitor;
 } Rule;
 
+#if SETUPENV_PATCH
+typedef struct {
+	const char *variable;
+	const char *value;
+} Env;
+#endif // SETUPENV_PATCH
+
 typedef struct {
 	struct wlr_scene_tree *scene;
 
@@ -2880,6 +2887,10 @@ run(char *startup_cmd)
 	if (!socket)
 		die("startup: display_add_socket_auto");
 	setenv("WAYLAND_DISPLAY", socket, 1);
+#if SETUPENV_PATCH
+	for (size_t i = 0; i < LENGTH(envs); i++)
+		setenv(envs[i].variable, envs[i].value, 1);
+#endif // SETUPENV_PATCH
 
 	/* Start the backend. This will enumerate outputs and inputs, become the DRM
 	 * master, etc */

@@ -15,12 +15,14 @@
   - [[#numlock-capslock][Numlock Capslock]]
   - [[#per-tag][Per Tag]]
   - [[#restore-monitor][Restore Monitor]]
+  - [[#setup-env][Setup Env]]
   - [[#vanity-gaps][Vanity Gaps]]
   - [[#warp-cursor][Warp Cursor]]
 - [[#dwl-configuration][dwl Configuration]]
   - [[#appearance][Appearance]]
   - [[#tagging][Tagging]]
   - [[#logging][Logging]]
+  - [[#environment-variables][Environment Variables]]
   - [[#autostart][Autostart]]
   - [[#window-rules][Window Rules]]
   - [[#layouts][Layouts]]
@@ -129,6 +131,14 @@ Moves clients to their old output when it is reattached.
 #define RESTORE_MONITOR_PATCH 1
 #+END_SRC
 
+** [[https://codeberg.org/dwl/dwl-patches/src/branch/main/patches/setupenv][Setup Env]]
+
+Allow configuring environment variables in config.h
+
+#+BEGIN_SRC c :tangle patches.def.h
+#define SETUPENV_PATCH 1
+#+END_SRC
+
 ** [[https://codeberg.org/dwl/dwl-patches/src/branch/main/patches/vanitygaps][Vanity Gaps]]
 
 Adds (inner) gaps between client windows and (outer) gaps between windows and the screen edge in a flexible manner.
@@ -195,6 +205,23 @@ static const float fullscreen_bg[]         = {0.1f, 0.1f, 0.1f, 1.0f}; /* You ca
 
 #+BEGIN_SRC c :tangle config.h
 static int log_level = WLR_ERROR;
+#+END_SRC
+
+** Environment Variables
+#+BEGIN_SRC c :tangle config.h
+#if SETUPENV_PATCH
+static const Env envs[] = {
+	/* variable                      value */
+	{ "TERM",                        "xterm-256color" },
+	{ "SHELL",                       "/bin/fish" },
+	{ "EDITOR",                      "emacs" },
+	{ "GIT_EDITOR",                  "emacs" },
+	{ "BROWSER",                     "vivaldi-stable" },
+	{ "QT_QPA_PLATFORMTHEME",        "qt6ct" },
+	{ "_JAVA_AWT_WM_NONREPARENTING", "1" },
+	{ "XDG_CURRENT_DESKTOP",         "wlroots" },
+};
+#endif // SETUPENV_PATCH
 #+END_SRC
 
 ** Autostart
