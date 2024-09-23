@@ -10,6 +10,7 @@
   - [[#attach-top][Attach Top]]
   - [[#auto-start][Auto Start]]
   - [[#foreign-toplevel-management][Foreign Toplevel Management]]
+  - [[#ipc][IPC]]
   - [[#natural-scroll-trackpad][Natural Scroll Trackpad]]
   - [[#numlock-capslock][Numlock Capslock]]
   - [[#per-tag][Per Tag]]
@@ -82,6 +83,18 @@ Implement ~foreign-toplevel-management~, it add handlers for activate, close, fu
 
 #+BEGIN_SRC c :tangle patches.def.h
 #define FOREIGN_TOPLEVEL_MANAGEMENT_PATCH 1
+#+END_SRC
+
+** [[https://codeberg.org/dwl/dwl-patches/src/branch/main/patches/ipc][IPC]]
+
+Largely based on [[https://sr.ht/~raphi/][raphi]]'s [[https://sr.ht/~raphi/somebar/][somebar]], this patch provides an ipc for wayland clients to get and set dwl state. The ipc is intended for status bars, but can also be scripted with tools like [[https://codeberg.org/notchoc/dwlmsg][dwlmsg]].
+
+Status information to stdout is currently disabled as dwl tends to freeze. For now, ~dwlmsg -w~ should act as a drop-in replacement.
+
+Note to [[https://codeberg.org/dwl/dwl-patches/src/branch/main/patches/pertag][pertag]] users: apply [[https://codeberg.org/dwl/dwl-patches/src/branch/main/patches/ipc/ipcpertag.patch][this]] for ipc tagsetting to work as expected
+
+#+BEGIN_SRC c :tangle patches.def.h
+#define IPC_PATCH 1
 #+END_SRC
 
 ** [[https://codeberg.org/dwl/dwl-patches/src/branch/main/patches/naturalscrolltrackpad][Natural Scroll Trackpad]]
@@ -351,6 +364,9 @@ static const Key keys[] = {
 	/* modifier                  key                 function        argument */
 	{ MODKEY,                    XKB_KEY_p,          spawn,          {.v = menucmd} },
 	{ MODKEY|WLR_MODIFIER_SHIFT, XKB_KEY_Return,     spawn,          {.v = termcmd} },
+#if IPC_PATCH
+	{ MODKEY,                    XKB_KEY_b,          togglebar,      {0} },
+#endif // IPC_PATCH
 	{ MODKEY,                    XKB_KEY_j,          focusstack,     {.i = +1} },
 	{ MODKEY,                    XKB_KEY_k,          focusstack,     {.i = -1} },
 	{ MODKEY,                    XKB_KEY_i,          incnmaster,     {.i = +1} },
