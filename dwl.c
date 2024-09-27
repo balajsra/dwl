@@ -902,7 +902,7 @@ cleanupmon(struct wl_listener *listener, void *data)
 	wlr_scene_output_destroy(m->scene_output);
 
 #if PERTAG_PATCH
-    free(m->pertag);
+	free(m->pertag);
 #endif // PERTAG_PATCH
 	closemon(m);
 	wlr_scene_node_destroy(&m->fullscreen_bg->node);
@@ -2052,9 +2052,9 @@ handlesig(int signo)
 		 */
 		while (!waitid(P_ALL, 0, &in, WEXITED|WNOHANG|WNOWAIT) && in.si_pid
 			   && (!xwayland || in.si_pid != xwayland->server->pid))
-            waitpid(in.si_pid, NULL, 0);
+			waitpid(in.si_pid, NULL, 0);
 #else // XWAYLAND
-        while (waitpid(-1, NULL, WNOHANG) > 0);
+		while (waitpid(-1, NULL, WNOHANG) > 0);
 #endif // XWAYLAND
 #endif // AUTOSTART_PATCH
 	} else if (signo == SIGINT || signo == SIGTERM) {
@@ -2373,7 +2373,7 @@ mapnotify(struct wl_listener *listener, void *data)
 	else
 		wl_list_insert(&clients, &c->link);
 #else // ATTACHTOP_PATCH
-    wl_list_insert(&clients, &c->link);
+	wl_list_insert(&clients, &c->link);
 #endif // ATTACHTOP_PATCH
 	wl_list_insert(&fstack, &c->flink);
 
@@ -2438,8 +2438,8 @@ monocle(Monitor *m)
 			resize(c, (struct wlr_box){.x = m->w.x + gappoh, .y = m->w.y + gappov,
 				.width = m->w.width - 2 * gappoh, .height = m->w.height - 2 * gappov}, 0);
 #else // VANITYGAPS_PATCH
-        resize(c, m->w, 0);
-        n++;
+		resize(c, m->w, 0);
+		n++;
 #endif // VANITYGAPS_PATCH
 	}
 	if (n)
@@ -3100,15 +3100,15 @@ setmon(Client *c, Monitor *m, uint32_t newtags)
 		if (c->foreign_toplevel)
 			wlr_foreign_toplevel_handle_v1_output_leave(c->foreign_toplevel, oldmon->wlr_output);
 		arrange(oldmon);
-    }
+	}
 #endif // FOREIGN_TOPLEVEL_MANAGEMENT_PATCH
 	if (m) {
 		/* Make sure window actually overlaps with the monitor */
 		resize(c, c->geom, 0);
 		c->tags = newtags ? newtags : m->tagset[m->seltags]; /* assign tags of target monitor */
 #if FOREIGN_TOPLEVEL_MANAGEMENT_PATCH
-        if (c->foreign_toplevel)
-            wlr_foreign_toplevel_handle_v1_output_enter(c->foreign_toplevel, m->wlr_output);
+		if (c->foreign_toplevel)
+			wlr_foreign_toplevel_handle_v1_output_enter(c->foreign_toplevel, m->wlr_output);
 #endif // FOREIGN_TOPLEVEL_MANAGEMENT_PATCH
 		setfullscreen(c, c->isfullscreen); /* This will call arrange(c->mon) */
 		setfloating(c, c->isfloating);
@@ -3415,8 +3415,8 @@ tagmon(const Arg *arg)
 		die("oom");
 	}
 #else // RESTORE_MONITOR_PATCH
-    if (sel)
-        setmon(sel, dirtomon(arg->i), 0);
+	if (sel)
+		setmon(sel, dirtomon(arg->i), 0);
 #endif // RESTORE_MONITOR_PATCH
 }
 
@@ -3455,8 +3455,8 @@ tile(Monitor *m)
 	i = 0;
 	my = ty = m->gappoh*oe;
 #else // VANITYGAPS_PATCH
-        mw = m->w.width;
-    i = my = ty = 0;
+	mw = m->w.width;
+	i = my = ty = 0;
 #endif // VANITYGAPS_PATCH
 	wl_list_for_each(c, &clients, link) {
 		if (!VISIBLEON(c, m) || c->isfloating || c->isfullscreen)
@@ -3469,9 +3469,9 @@ tile(Monitor *m)
 				.width = mw - m->gappiv*ie, .height = h}, 0);
 			my += c->geom.height + m->gappih*ie;
 #else // VANITYGAPS_PATCH
-            resize(c, (struct wlr_box){.x = m->w.x, .y = m->w.y + my, .width = mw,
-                .height = (m->w.height - my) / (MIN(n, m->nmaster) - i)}, 0);
-            my += c->geom.height;
+			resize(c, (struct wlr_box){.x = m->w.x, .y = m->w.y + my, .width = mw,
+				.height = (m->w.height - my) / (MIN(n, m->nmaster) - i)}, 0);
+			my += c->geom.height;
 #endif // VANITYGAPS_PATCH
 		} else {
 #if VANITYGAPS_PATCH
@@ -3481,9 +3481,9 @@ tile(Monitor *m)
 				.width = m->w.width - mw - 2*m->gappov*oe, .height = h}, 0);
 			ty += c->geom.height + m->gappih*ie;
 #else // VANITYGAPS_PATCH
-            resize(c, (struct wlr_box){.x = m->w.x + mw, .y = m->w.y + ty,
-                .width = m->w.width - mw, .height = (m->w.height - ty) / (n - i)}, 0);
-            ty += c->geom.height;
+			resize(c, (struct wlr_box){.x = m->w.x + mw, .y = m->w.y + ty,
+				.width = m->w.width - mw, .height = (m->w.height - ty) / (n - i)}, 0);
+			ty += c->geom.height;
 #endif // VANITYGAPS_PATCH
 		}
 		i++;
@@ -3776,7 +3776,6 @@ view(const Arg *arg)
 #if PERTAG_PATCH
 	size_t i, tmptag;
 #endif // PERTAG_PATCH
-       //
 	if (!selmon || (arg->ui & TAGMASK) == selmon->tagset[selmon->seltags])
 		return;
 	selmon->seltags ^= 1; /* toggle sel tagset */
