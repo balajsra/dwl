@@ -1,3 +1,5 @@
+#define ALWAYSCENTER_PATCH 1
+
 #define ATTACHTOP_PATCH 1
 
 #define AUTOSTART_PATCH 1
