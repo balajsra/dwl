@@ -10,6 +10,7 @@
   - [[#always-center][Always Center]]
   - [[#attach-top][Attach Top]]
   - [[#auto-start][Auto Start]]
+  - [[#float-unfocused-border-color][Float Unfocused Border Color]]
   - [[#foreign-toplevel-management][Foreign Toplevel Management]]
   - [[#ipc][IPC]]
   - [[#natural-scroll-trackpad][Natural Scroll Trackpad]]
@@ -86,6 +87,16 @@ Note: Commands from array are executed using execvp(). So if you need to execute
 
 #+BEGIN_SRC c :tangle patches.def.h
 #define AUTOSTART_PATCH 1
+#+END_SRC
+
+** [[https://codeberg.org/dwl/dwl-patches/src/branch/main/patches/float-unfocused-border-color][Float Unfocused Border Color]]
+
+A revive of the floatBorderColor patch.
+
+This patch allows you to set a color for floating windows when they are unfocused.
+
+#+BEGIN_SRC c :tangle patches.def.h
+#define FLOAT_UNFOCUSED_BORDER_COLOR_PATCH 1
 #+END_SRC
 
 ** [[https://codeberg.org/dwl/dwl-patches/src/branch/main/patches/foreign-toplevel-management][Foreign Toplevel Management]]
@@ -199,6 +210,9 @@ static const float rootcolor[]             = COLOR(0x282a36ff);
 static const float bordercolor[]           = COLOR(0x4d4d4dff);
 static const float focuscolor[]            = COLOR(0xbd93f9ff);
 static const float urgentcolor[]           = COLOR(0xff5555ff);
+#if FLOAT_UNFOCUSED_BORDER_COLOR_PATCH
+static const float floatcolor[]            = COLOR(0xff79c6ff);
+#endif // FLOAT_UNFOCUSED_BORDER_COLOR_PATCH
 /* This conforms to the xdg-protocol. Set the alpha to zero to restore the old behavior */
 static const float fullscreen_bg[]         = {0.1f, 0.1f, 0.1f, 1.0f}; /* You can also use glsl colors */
 #+END_SRC

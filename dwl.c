@@ -806,6 +806,9 @@ buttonpress(struct wl_listener *listener, void *data)
 			/* Drop the window off on its new monitor */
 			selmon = xytomon(cursor->x, cursor->y);
 			setmon(grabc, selmon, 0);
+#if FLOAT_UNFOCUSED_BORDER_COLOR_PATCH
+			grabc = NULL;
+#endif // FLOAT_UNFOCUSED_BORDER_COLOR_PATCH
 			return;
 		} else {
 			cursor_mode = CurNormal;
@@ -1907,9 +1910,13 @@ focusclient(Client *c, int lift)
 		/* Don't deactivate old client if the new one wants focus, as this causes issues with winecfg
 		 * and probably other clients */
 		} else if (old_c && !client_is_unmanaged(old_c) && (!c || !client_wants_focus(c))) {
+#if !FLOAT_UNFOCUSED_BORDER_COLOR_PATCH
 			client_set_border_color(old_c, bordercolor);
-
 			client_activate_surface(old, 0);
+#else // FLOAT_UNFOCUSED_BORDER_COLOR_PATCH
+			client_set_border_color(old_c, old_c->isfloating ? floatcolor : bordercolor);
+			client_activate_surface(old, 0);
+#endif // FLOAT_UNFOCUSED_BORDER_COLOR_PATCH
 #if FOREIGN_TOPLEVEL_MANAGEMENT_PATCH
 			if (old_c->foreign_toplevel)
 				wlr_foreign_toplevel_handle_v1_set_activated(old_c->foreign_toplevel, 0);
@@ -3004,6 +3011,13 @@ setfloating(Client *c, int floating)
 	wlr_scene_node_reparent(&c->scene->node, layers[c->isfullscreen ||
 			(p && p->isfullscreen) ? LyrFS
 			: c->isfloating ? LyrFloat : LyrTile]);
+#if FLOAT_UNFOCUSED_BORDER_COLOR_PATCH
+ 	if (!grabc && floating)
+			for (int i = 0; i < 4; i++) {
+				wlr_scene_rect_set_color(c->border[i], floatcolor);
+				wlr_scene_node_lower_to_bottom(&c->border[i]->node);
+			}
+#endif // FLOAT_UNFOCUSED_BORDER_COLOR_PATCH
 	arrange(c->mon);
 	printstatus();
 }
