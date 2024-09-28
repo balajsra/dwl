@@ -6,13 +6,17 @@
 /* appearance */
 static const int sloppyfocus               = 1;  /* focus follows mouse */
 static const int bypass_surface_visibility = 0;  /* 1 means idle inhibitors will disable idle tracking even if it's surface isn't visible  */
+#if VANITYGAPS_PATCH
 static const int smartgaps                 = 0;  /* 1 means no outer gap when there is only one window */
 static const int monoclegaps               = 0;  /* 1 means outer gaps in monocle layout */
+#endif // VANITYGAPS_PATCH
 static const unsigned int borderpx         = 1;  /* border pixel of windows */
+#if VANITYGAPS_PATCH
 static const unsigned int gappih           = 10; /* horiz inner gap between windows */
 static const unsigned int gappiv           = 10; /* vert inner gap between windows */
 static const unsigned int gappoh           = 10; /* horiz outer gap between windows and screen edge */
 static const unsigned int gappov           = 10; /* vert outer gap between windows and screen edge */
+#endif // VANITYGAPS_PATCH
 static const float rootcolor[]             = COLOR(0x222222ff);
 static const float bordercolor[]           = COLOR(0x444444ff);
 static const float focuscolor[]            = COLOR(0x005577ff);
@@ -29,17 +33,20 @@ static const float fullscreen_bg[]         = {0.1f, 0.1f, 0.1f, 1.0f}; /* You ca
 /* logging */
 static int log_level = WLR_ERROR;
 
+#if SETUPENV_PATCH
 static const Env envs[] = {
 	/* variable			value */
 	{ "XDG_CURRENT_DESKTOP",	"wlroots" },
 };
+#endif // SETUPENV_PATCH
 
 /* Autostart */
+#if AUTOSTART_PATCH
 static const char *const autostart[] = {
         "wbg", "/path/to/your/image", NULL,
         NULL /* terminate */
 };
-
+#endif // AUTOSTART_PATCH
 
 /* NOTE: ALWAYS keep a rule declared even if you don't use rules (e.g leave at least one example) */
 static const Rule rules[] = {
@@ -163,6 +170,7 @@ static const Key keys[] = {
 	{ MODKEY,                    XKB_KEY_d,          incnmaster,     {.i = -1} },
 	{ MODKEY,                    XKB_KEY_h,          setmfact,       {.f = -0.05f} },
 	{ MODKEY,                    XKB_KEY_l,          setmfact,       {.f = +0.05f} },
+#if VANITYGAPS_PATCH
 	{ MODKEY|WLR_MODIFIER_LOGO,  XKB_KEY_h,          incgaps,       {.i = +1 } },
 	{ MODKEY|WLR_MODIFIER_LOGO,  XKB_KEY_l,          incgaps,       {.i = -1 } },
 	{ MODKEY|WLR_MODIFIER_LOGO|WLR_MODIFIER_SHIFT,   XKB_KEY_H,      incogaps,      {.i = +1 } },
@@ -179,6 +187,7 @@ static const Key keys[] = {
 	{ MODKEY|WLR_MODIFIER_LOGO,  XKB_KEY_o,          incohgaps,     {.i = -1 } },
 	{ MODKEY|WLR_MODIFIER_SHIFT, XKB_KEY_Y,          incovgaps,     {.i = +1 } },
 	{ MODKEY|WLR_MODIFIER_SHIFT, XKB_KEY_O,          incovgaps,     {.i = -1 } },
+#endif // VANITYGAPS_PATCH
 	{ MODKEY,                    XKB_KEY_Return,     zoom,           {0} },
 	{ MODKEY,                    XKB_KEY_Tab,        view,           {0} },
 	{ MODKEY|WLR_MODIFIER_SHIFT, XKB_KEY_C,          killclient,     {0} },
