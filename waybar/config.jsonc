@@ -1,0 +1,36 @@
+// -*- mode: jsonc -*-
+{
+
+    "layer": "top", // Waybar at top layer
+    // "output": "",
+    "position": "top", // Waybar position (top|bottom|left|right)
+    // "height": 25, // Waybar height (to be removed for auto height)
+    // "width": 1280, // Waybar width
+    "spacing": 4, // Gaps between modules (4px)
+    // Choose the order of the modules
+    "modules-left": [
+        "dwl/tags",
+        "pulseaudio",
+        "backlight",
+        "mpd"
+    ],
+    "modules-center": [
+        "tray"
+    ],
+    "modules-right": [
+        "idle_inhibitor",
+        "network",
+        "cpu",
+        "memory",
+        "keyboard-state",
+        "battery",
+        "clock"
+    ],
+
+    "dwl/tags": {
+        "num-tags": 9,
+        "tag-labels": [ "󰍩 ₁", "󰠮 ₂", " ₃", "󰿎 ₄", "󰖟 ₅", " ₆", "󰊢 ₇", "󰊖 ₈", " ₉" ],
+        "disable-click": false
+    },
+
+}

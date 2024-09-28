@@ -1,4 +1,4 @@
-#+TITLE: Personal dwl Configuration
+#+TITLE: Personal dwl Configuration with Waybar
 #+AUTHOR: Sravan Balaji
 #+AUTO_TANGLE: t
 #+STARTUP: showeverything
@@ -6,35 +6,41 @@
 * Table of Contents :TOC_3:noexport:
 - [[#welcome][Welcome]]
 - [[#dwl---dwm-for-wayland][dwl - dwm for Wayland]]
-- [[#patches][Patches]]
-  - [[#always-center][Always Center]]
-  - [[#attach-top][Attach Top]]
-  - [[#auto-start][Auto Start]]
-  - [[#float-unfocused-border-color][Float Unfocused Border Color]]
-  - [[#foreign-toplevel-management][Foreign Toplevel Management]]
-  - [[#ipc][IPC]]
-  - [[#natural-scroll-trackpad][Natural Scroll Trackpad]]
-  - [[#numlock-capslock][Numlock Capslock]]
-  - [[#per-tag][Per Tag]]
-  - [[#restore-monitor][Restore Monitor]]
-  - [[#setup-env][Setup Env]]
-  - [[#unclutter][Unclutter]]
-  - [[#vanity-gaps][Vanity Gaps]]
-  - [[#warp-cursor][Warp Cursor]]
-- [[#dwl-configuration][dwl Configuration]]
-  - [[#appearance][Appearance]]
-  - [[#tagging][Tagging]]
-  - [[#logging][Logging]]
-  - [[#environment-variables][Environment Variables]]
-  - [[#autostart][Autostart]]
-  - [[#window-rules][Window Rules]]
-  - [[#layouts][Layouts]]
-  - [[#monitor-rules][Monitor Rules]]
-  - [[#keyboard][Keyboard]]
-  - [[#trackpad][Trackpad]]
-  - [[#keybindings][Keybindings]]
-  - [[#commands][Commands]]
-  - [[#buttons][Buttons]]
+  - [[#patches][Patches]]
+    - [[#always-center][Always Center]]
+    - [[#attach-top][Attach Top]]
+    - [[#auto-start][Auto Start]]
+    - [[#float-unfocused-border-color][Float Unfocused Border Color]]
+    - [[#foreign-toplevel-management][Foreign Toplevel Management]]
+    - [[#ipc][IPC]]
+    - [[#natural-scroll-trackpad][Natural Scroll Trackpad]]
+    - [[#numlock-capslock][Numlock Capslock]]
+    - [[#per-tag][Per Tag]]
+    - [[#restore-monitor][Restore Monitor]]
+    - [[#setup-env][Setup Env]]
+    - [[#unclutter][Unclutter]]
+    - [[#vanity-gaps][Vanity Gaps]]
+    - [[#warp-cursor][Warp Cursor]]
+  - [[#configuration][Configuration]]
+    - [[#appearance][Appearance]]
+    - [[#tagging][Tagging]]
+    - [[#logging][Logging]]
+    - [[#environment-variables][Environment Variables]]
+    - [[#autostart][Autostart]]
+    - [[#window-rules][Window Rules]]
+    - [[#layouts][Layouts]]
+    - [[#monitor-rules][Monitor Rules]]
+    - [[#keyboard][Keyboard]]
+    - [[#trackpad][Trackpad]]
+    - [[#keybindings][Keybindings]]
+    - [[#commands][Commands]]
+    - [[#buttons][Buttons]]
+- [[#waybar][Waybar]]
+  - [[#start-configuration][Start Configuration]]
+  - [[#bar-configuration][Bar Configuration]]
+  - [[#modules][Modules]]
+    - [[#dwltags][dwl/tags]]
+  - [[#end-configuration][End Configuration]]
 - [[#justfile][Justfile]]
 
 * Welcome
@@ -58,9 +64,9 @@ sudo make clean install
 
 See [[./README.md][Upstream README]] for details on project.
 
-* Patches
+** Patches
 
-** [[https://codeberg.org/dwl/dwl-patches/src/branch/main/patches/alwayscenter][Always Center]]
+*** [[https://codeberg.org/dwl/dwl-patches/src/branch/main/patches/alwayscenter][Always Center]]
 
 Automatically center floating windows.
 
@@ -68,7 +74,7 @@ Automatically center floating windows.
 #define ALWAYSCENTER_PATCH 1
 #+END_SRC
 
-** [[https://codeberg.org/dwl/dwl-patches/src/branch/main/patches/attachtop][Attach Top]]
+*** [[https://codeberg.org/dwl/dwl-patches/src/branch/main/patches/attachtop][Attach Top]]
 
 This is a port of attachtop patch for dwm: https://dwm.suckless.org/patches/attachtop
 
@@ -80,7 +86,7 @@ Behavior feels very intuitive as it doesn't disrupt existing masters no matter t
 #define ATTACHTOP_PATCH 1
 #+END_SRC
 
-** [[https://codeberg.org/dwl/dwl-patches/src/branch/main/patches/autostart][Auto Start]]
+*** [[https://codeberg.org/dwl/dwl-patches/src/branch/main/patches/autostart][Auto Start]]
 
 Allow dwl to execute commands from autostart array in your config.h file. And when you exit dwl all processes from autostart array will be killed.
 
@@ -90,7 +96,7 @@ Note: Commands from array are executed using execvp(). So if you need to execute
 #define AUTOSTART_PATCH 1
 #+END_SRC
 
-** [[https://codeberg.org/dwl/dwl-patches/src/branch/main/patches/float-unfocused-border-color][Float Unfocused Border Color]]
+*** [[https://codeberg.org/dwl/dwl-patches/src/branch/main/patches/float-unfocused-border-color][Float Unfocused Border Color]]
 
 A revive of the floatBorderColor patch.
 
@@ -100,7 +106,7 @@ This patch allows you to set a color for floating windows when they are unfocuse
 #define FLOAT_UNFOCUSED_BORDER_COLOR_PATCH 1
 #+END_SRC
 
-** [[https://codeberg.org/dwl/dwl-patches/src/branch/main/patches/foreign-toplevel-management][Foreign Toplevel Management]]
+*** [[https://codeberg.org/dwl/dwl-patches/src/branch/main/patches/foreign-toplevel-management][Foreign Toplevel Management]]
 
 Implement ~foreign-toplevel-management~, it add handlers for activate, close, fullscreen and destroy request events, it's missing minimize and maximize request handlers.
 
@@ -108,7 +114,7 @@ Implement ~foreign-toplevel-management~, it add handlers for activate, close, fu
 #define FOREIGN_TOPLEVEL_MANAGEMENT_PATCH 1
 #+END_SRC
 
-** [[https://codeberg.org/dwl/dwl-patches/src/branch/main/patches/ipc][IPC]]
+*** [[https://codeberg.org/dwl/dwl-patches/src/branch/main/patches/ipc][IPC]]
 
 Largely based on [[https://sr.ht/~raphi/][raphi]]'s [[https://sr.ht/~raphi/somebar/][somebar]], this patch provides an ipc for wayland clients to get and set dwl state. The ipc is intended for status bars, but can also be scripted with tools like [[https://codeberg.org/notchoc/dwlmsg][dwlmsg]].
 
@@ -120,7 +126,7 @@ Note to [[https://codeberg.org/dwl/dwl-patches/src/branch/main/patches/pertag][p
 #define IPC_PATCH 1
 #+END_SRC
 
-** [[https://codeberg.org/dwl/dwl-patches/src/branch/main/patches/naturalscrolltrackpad][Natural Scroll Trackpad]]
+*** [[https://codeberg.org/dwl/dwl-patches/src/branch/main/patches/naturalscrolltrackpad][Natural Scroll Trackpad]]
 
 Set natural scrolling only for trackpads.
 
@@ -128,7 +134,7 @@ Set natural scrolling only for trackpads.
 #define NATURALSCROLLTRACKPAD_PATCH 1
 #+END_SRC
 
-** [[https://codeberg.org/dwl/dwl-patches/src/branch/main/patches/numlock-capslock][Numlock Capslock]]
+*** [[https://codeberg.org/dwl/dwl-patches/src/branch/main/patches/numlock-capslock][Numlock Capslock]]
 
 Allows activating numlock or capslock at startup.
 
@@ -136,7 +142,7 @@ Allows activating numlock or capslock at startup.
 #define NUMLOCK_CAPSLOCK_PATCH 1
 #+END_SRC
 
-** [[https://codeberg.org/dwl/dwl-patches/src/branch/main/patches/pertag][Per Tag]]
+*** [[https://codeberg.org/dwl/dwl-patches/src/branch/main/patches/pertag][Per Tag]]
 
 Makes layout, mwfact and nmaster individual for every tag.
 
@@ -144,7 +150,7 @@ Makes layout, mwfact and nmaster individual for every tag.
 #define PERTAG_PATCH 1
 #+END_SRC
 
-** [[https://codeberg.org/dwl/dwl-patches/src/branch/main/patches/restore-monitor][Restore Monitor]]
+*** [[https://codeberg.org/dwl/dwl-patches/src/branch/main/patches/restore-monitor][Restore Monitor]]
 
 Moves clients to their old output when it is reattached.
 
@@ -152,7 +158,7 @@ Moves clients to their old output when it is reattached.
 #define RESTORE_MONITOR_PATCH 1
 #+END_SRC
 
-** [[https://codeberg.org/dwl/dwl-patches/src/branch/main/patches/setupenv][Setup Env]]
+*** [[https://codeberg.org/dwl/dwl-patches/src/branch/main/patches/setupenv][Setup Env]]
 
 Allow configuring environment variables in config.h
 
@@ -160,7 +166,7 @@ Allow configuring environment variables in config.h
 #define SETUPENV_PATCH 1
 #+END_SRC
 
-** [[https://codeberg.org/dwl/dwl-patches/src/branch/main/patches/unclutter][Unclutter]]
+*** [[https://codeberg.org/dwl/dwl-patches/src/branch/main/patches/unclutter][Unclutter]]
 
 Hide the mouse cursor if it isn't being used for a certain period of time.
 
@@ -168,7 +174,7 @@ Hide the mouse cursor if it isn't being used for a certain period of time.
 #define UNCLUTTER_PATCH 1
 #+END_SRC
 
-** [[https://codeberg.org/dwl/dwl-patches/src/branch/main/patches/vanitygaps][Vanity Gaps]]
+*** [[https://codeberg.org/dwl/dwl-patches/src/branch/main/patches/vanitygaps][Vanity Gaps]]
 
 Adds (inner) gaps between client windows and (outer) gaps between windows and the screen edge in a flexible manner.
 
@@ -176,7 +182,7 @@ Adds (inner) gaps between client windows and (outer) gaps between windows and th
 #define VANITYGAPS_PATCH 1
 #+END_SRC
 
-** [[https://codeberg.org/dwl/dwl-patches/src/branch/main/patches/warpcursor][Warp Cursor]]
+*** [[https://codeberg.org/dwl/dwl-patches/src/branch/main/patches/warpcursor][Warp Cursor]]
 
 Warp cursor to the centre of newly focused clients.
 
@@ -188,11 +194,11 @@ This is my version of the orphaned cursorwarp patch except I left out the config
 #define WARPCURSOR_PATCH 1
 #+END_SRC
 
-* dwl Configuration
+** Configuration
 
 Taken from https://github.com/djpohly/dwl/issues/466.
 
-** Appearance
+*** Appearance
 
 #+BEGIN_SRC c :tangle config.h
 #define COLOR(hex)    { ((hex >> 24) & 0xFF) / 255.0f, \
@@ -226,20 +232,20 @@ static const float floatcolor[]            = COLOR(0xff79c6ff);
 static const float fullscreen_bg[]         = {0.1f, 0.1f, 0.1f, 1.0f}; /* You can also use glsl colors */
 #+END_SRC
 
-** Tagging
+*** Tagging
 
 #+BEGIN_SRC c :tangle config.h
 /* tagging - TAGCOUNT must be no greater than 31 */
 #define TAGCOUNT (9)
 #+END_SRC
 
-** Logging
+*** Logging
 
 #+BEGIN_SRC c :tangle config.h
 static int log_level = WLR_ERROR;
 #+END_SRC
 
-** Environment Variables
+*** Environment Variables
 #+BEGIN_SRC c :tangle config.h
 #if SETUPENV_PATCH
 static const Env envs[] = {
@@ -256,14 +262,14 @@ static const Env envs[] = {
 #endif // SETUPENV_PATCH
 #+END_SRC
 
-** Autostart
+*** Autostart
 
 #+BEGIN_SRC c :tangle config.h
 #if AUTOSTART_PATCH
 static const char *const autostart[] = {
         /* Display / Compositor Setup */
         "/usr/bin/shikane", NULL,
-        "/usr/bin/waybar", NULL,
+        "/usr/bin/waybar", "-c", "/home/sravan/.config/dwl/waybar/config.jsonc", "-s", "/home/sravan/.config/dwl/waybar/style.css", NULL,
         "/usr/bin/bash", "/home/sravan/.azotebg", NULL,
         "/usr/bin/gammastep", "-x", NULL,
         /* Background Processes */
@@ -288,7 +294,7 @@ static const char *const autostart[] = {
 #endif // AUTOSTART_PATCH
 #+END_SRC
 
-** Window Rules
+*** Window Rules
 
 #+BEGIN_SRC c :tangle config.h
 /* NOTE: ALWAYS keep a rule declared even if you don't use rules (e.g leave at least one example) */
@@ -300,7 +306,7 @@ static const Rule rules[] = {
 };
 #+END_SRC
 
-** Layouts
+*** Layouts
 
 #+BEGIN_SRC c :tangle config.h
 static const Layout layouts[] = {
@@ -311,7 +317,7 @@ static const Layout layouts[] = {
 };
 #+END_SRC
 
-** Monitor Rules
+*** Monitor Rules
 
 #+BEGIN_SRC c :tangle config.h
 /* (x=-1, y=-1) is reserved as an "autoconfigure" monitor position indicator
@@ -329,7 +335,7 @@ static const MonitorRule monrules[] = {
 };
 #+END_SRC
 
-** Keyboard
+*** Keyboard
 
 #+BEGIN_SRC c :tangle config.h
 static const struct xkb_rule_names xkb_rules = {
@@ -350,7 +356,7 @@ static const int repeat_rate = 25;
 static const int repeat_delay = 600;
 #+END_SRC
 
-** Trackpad
+*** Trackpad
 
 #+BEGIN_SRC c :tangle config.h
 static const int tap_to_click = 1;
@@ -400,7 +406,7 @@ LIBINPUT_CONFIG_TAP_MAP_LMR -- 1/2/3 finger tap maps to left/middle/right
 static const enum libinput_config_tap_button_map button_map = LIBINPUT_CONFIG_TAP_MAP_LRM;
 #+END_SRC
 
-** Keybindings
+*** Keybindings
 
 #+BEGIN_SRC c :tangle config.h
 /* If you want to use the windows key for MODKEY, use WLR_MODIFIER_LOGO */
@@ -416,7 +422,7 @@ static const enum libinput_config_tap_button_map button_map = LIBINPUT_CONFIG_TA
 #define SHCMD(cmd) { .v = (const char*[]){ "/bin/sh", "-c", cmd, NULL } }
 #+END_SRC
 
-** Commands
+*** Commands
 
 #+BEGIN_SRC c :tangle config.h
 static const char *termcmd[]         = { "kitty", NULL };
@@ -491,7 +497,7 @@ static const Key keys[] = {
 };
 #+END_SRC
 
-** Buttons
+*** Buttons
 
 #+BEGIN_SRC c :tangle config.h
 static const Button buttons[] = {
@@ -499,6 +505,84 @@ static const Button buttons[] = {
 	{ MODKEY, BTN_MIDDLE, togglefloating, {0} },
 	{ MODKEY, BTN_RIGHT,  moveresize,     {.ui = CurResize} },
 };
+#+END_SRC
+
+* Waybar
+
+** Start Configuration
+
+#+BEGIN_SRC jsonc :tangle waybar/config.jsonc
+// -*- mode: jsonc -*-
+{
+#+END_SRC
+
+** Bar Configuration
+
+#+BEGIN_SRC jsonc :tangle waybar/config.jsonc
+    "layer": "top", // Waybar at top layer
+    // "output": "",
+    "position": "top", // Waybar position (top|bottom|left|right)
+    // "height": 25, // Waybar height (to be removed for auto height)
+    // "width": 1280, // Waybar width
+    "spacing": 4, // Gaps between modules (4px)
+    // Choose the order of the modules
+    "modules-left": [
+        "dwl/tags",
+        "pulseaudio",
+        "backlight",
+        "mpd"
+    ],
+    "modules-center": [
+        "tray"
+    ],
+    "modules-right": [
+        "idle_inhibitor",
+        "network",
+        "cpu",
+        "memory",
+        "keyboard-state",
+        "battery",
+        "clock"
+    ],
+#+END_SRC
+
+** Modules
+
+*** dwl/tags
+
+**** Configuration
+
+#+BEGIN_SRC jsonc :tangle waybar/config.jsonc
+    "dwl/tags": {
+        "num-tags": 9,
+        "tag-labels": [ "󰍩 ₁", "󰠮 ₂", " ₃", "󰿎 ₄", "󰖟 ₅", " ₆", "󰊢 ₇", "󰊖 ₈", " ₉" ],
+        "disable-click": false
+    },
+#+END_SRC
+
+**** Styling
+
+#+BEGIN_SRC css :tangle waybar/style.css
+#tags button {
+    padding: 0 5px;
+    background: transparent;
+    border-bottom: 3px solid transparent;
+}
+#tags button.occupied {
+    color: #f1fa8c;
+}
+#tags button.focused {
+    color: #bd93f9;
+}
+#tags button.urgent {
+    color: #ff5555;
+}
+#+END_SRC
+
+** End Configuration
+
+#+BEGIN_SRC jsonc :tangle waybar/config.jsonc
+}
 #+END_SRC
 
 * Justfile
@@ -513,4 +597,8 @@ default:
 # Rebuild project
 dwl-rebuild:
     sudo make clean all
+
+# Run waybar with dwl configuration
+dwl-launch-waybar:
+    /usr/bin/waybar -c /home/sravan/.config/dwl/waybar/config.jsonc -s /home/sravan/.config/dwl/waybar/style.css
 #+END_SRC

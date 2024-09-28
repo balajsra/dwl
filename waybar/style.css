@@ -1,0 +1,14 @@
+#tags button {
+    padding: 0 5px;
+    background: transparent;
+    border-bottom: 3px solid transparent;
+}
+#tags button.occupied {
+    color: #f1fa8c;
+}
+#tags button.focused {
+    color: #bd93f9;
+}
+#tags button.urgent {
+    color: #ff5555;
+}

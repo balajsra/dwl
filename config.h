@@ -49,7 +49,7 @@ static const Env envs[] = {
 static const char *const autostart[] = {
         /* Display / Compositor Setup */
         "/usr/bin/shikane", NULL,
-        "/usr/bin/waybar", NULL,
+        "/usr/bin/waybar", "-c", "/home/sravan/.config/dwl/waybar/config.jsonc", "-s", "/home/sravan/.config/dwl/waybar/style.css", NULL,
         "/usr/bin/bash", "/home/sravan/.azotebg", NULL,
         "/usr/bin/gammastep", "-x", NULL,
         /* Background Processes */
