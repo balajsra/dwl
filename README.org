@@ -37,9 +37,18 @@
     - [[#buttons][Buttons]]
 - [[#waybar][Waybar]]
   - [[#start-configuration][Start Configuration]]
-  - [[#bar-configuration][Bar Configuration]]
+  - [[#bar][Bar]]
+    - [[#configuration-1][Configuration]]
+    - [[#styling][Styling]]
   - [[#modules][Modules]]
+    - [[#battery][battery]]
+    - [[#cpu][cpu]]
+    - [[#clock][clock]]
     - [[#dwltags][dwl/tags]]
+    - [[#disk][disk]]
+    - [[#memory][memory]]
+    - [[#pulseaudio][pulseaudio]]
+    - [[#tray][tray]]
   - [[#end-configuration][End Configuration]]
 - [[#justfile][Justfile]]
 
@@ -516,7 +525,9 @@ static const Button buttons[] = {
 {
 #+END_SRC
 
-** Bar Configuration
+** Bar
+
+*** Configuration
 
 #+BEGIN_SRC jsonc :tangle waybar/config.jsonc
     "layer": "top", // Waybar at top layer
@@ -524,29 +535,107 @@ static const Button buttons[] = {
     "position": "top", // Waybar position (top|bottom|left|right)
     // "height": 25, // Waybar height (to be removed for auto height)
     // "width": 1280, // Waybar width
-    "spacing": 4, // Gaps between modules (4px)
     // Choose the order of the modules
+    "spacing": 4, // Gaps between modules (4px)
+    "mode": "dock",
+    "start_hidden": false,
+    "fixed-center": true,
+    "reload_style_on_change": true,
     "modules-left": [
         "dwl/tags",
-        "pulseaudio",
-        "backlight",
-        "mpd"
     ],
     "modules-center": [
-        "tray"
+        "tray",
     ],
     "modules-right": [
-        "idle_inhibitor",
-        "network",
+        "pulseaudio",
         "cpu",
         "memory",
-        "keyboard-state",
+        "disk",
         "battery",
         "clock"
     ],
 #+END_SRC
 
+*** Styling
+
+#+BEGIN_SRC css :tangle waybar/style.css
+window#waybar {
+    background: #282a36;
+}
+
+.module {
+    border-radius: 25px;
+    padding: 0px 3px;
+    font-size: 14px;
+}
+#+END_SRC
+
 ** Modules
+
+*** battery
+
+**** Configuration
+
+#+BEGIN_SRC jsonc :tangle waybar/config.jsonc
+    "battery": {
+        "interval": 60,
+        "format": "{icon} {capacity}%",
+        "format-icons": ["󰂎", "󰁺", "󰁻", "󰁼", "󰁽", "󰁾", "󰁿", "󰂀", "󰂁", "󰂂", "󰁹"],
+        "tooltip": true,
+        "tooltip-format": "󱧥  {timeTo}\n󱐋  {power} W\n󱠴  {cycles}\n󱈏  {health}%",
+    },
+#+END_SRC
+
+**** Styling
+
+#+BEGIN_SRC css :tangle waybar/style.css
+#battery {
+    background: #50fa7b;
+    color: #282a36;
+}
+#+END_SRC
+
+*** cpu
+
+**** Configuration
+
+#+BEGIN_SRC jsonc :tangle waybar/config.jsonc
+    "cpu": {
+        "interval": 5,
+        "format": "   {usage}%",
+        "tooltip": true,
+    },
+#+END_SRC
+
+**** Styling
+
+#+BEGIN_SRC css :tangle waybar/style.css
+#cpu {
+    background: #bd93f9;
+    color: #282a36;
+}
+#+END_SRC
+
+*** clock
+
+**** Configuration
+
+#+BEGIN_SRC jsonc :tangle waybar/config.jsonc
+    "clock": {
+        "interval": 60,
+        "format": "󰥔  {:%H:%M}"
+    },
+#+END_SRC
+
+**** Styling
+
+#+BEGIN_SRC css :tangle waybar/style.css
+#clock {
+    background: #bd93f9;
+    color: #282a36;
+}
+#+END_SRC
 
 *** dwl/tags
 
@@ -563,19 +652,126 @@ static const Button buttons[] = {
 **** Styling
 
 #+BEGIN_SRC css :tangle waybar/style.css
+#tags {
+    color: #f8f8f2;
+    background: #44475a;
+}
 #tags button {
-    padding: 0 5px;
-    background: transparent;
-    border-bottom: 3px solid transparent;
+    margin-left: 3px;
+    margin-right: 3px;
+    padding: 0px 3px;
 }
 #tags button.occupied {
-    color: #f1fa8c;
+    background: #f1fa8c;
+    color: #282a36;
 }
 #tags button.focused {
-    color: #bd93f9;
+    background: #bd93f9;
+    color: #282a36;
 }
 #tags button.urgent {
-    color: #ff5555;
+    background: #ff5555;
+    color: #282a36;
+}
+#+END_SRC
+
+*** disk
+
+**** Configuration
+
+#+BEGIN_SRC jsonc :tangle waybar/config.jsonc
+    "disk": {
+        "interval": 60,
+        "format": "󰋊  {percentage_used}%",
+        "tooltip": true,
+        "tooltip-format": "Used: {used} ({percentage_used}%)\nFree: {free} ({percentage_free}%)\nTotal: {total}",
+    },
+#+END_SRC
+
+**** Styling
+
+#+BEGIN_SRC css :tangle waybar/style.css
+#disk {
+    color: #282a36;
+    background: #ff79c6;
+}
+#+END_SRC
+
+*** memory
+
+**** Configuration
+
+#+BEGIN_SRC jsonc :tangle waybar/config.jsonc
+    "memory": {
+        "interval": 5,
+        "format": "  {percentage}%",
+        "tooltip": true,
+        "tooltip-format": "RAM:\n\tUsed: {used} GiB ({percentage}%)\n\tFree: {avail} GiB\n\tTotal: {total} GiB\nSwap:\n\tUsed: {swapUsed} GiB ({swapPercentage}%)\n\tFree: {swapAvail} GiB\n\tTotal: {swapTotal} GiB",
+    },
+#+END_SRC
+
+**** Styling
+
+#+BEGIN_SRC css :tangle waybar/style.css
+#memory {
+    color: #282a36;
+    background: #8be9fd;
+}
+#+END_SRC
+
+*** pulseaudio
+
+**** Configuration
+
+#+BEGIN_SRC jsonc :tangle waybar/config.jsonc
+    "pulseaudio": {
+        "interval": 5,
+        "format": "{icon}  {volume}%",
+        "format-bluetooth": "{icon} 󰂯  {volume}%",
+        "format-muted": "󰝟  muted",
+        "format-icons": {
+            "hdmi": "󰡁",
+            "headset": "󰋎",
+            "speaker": "󰓃",
+            "headphone": "󰋋",
+            "car": "",
+            "hifi": "󰤽",
+            "default": "",
+        },
+        "scroll-step": 5,
+        "on-click": "pavucontrol",
+        "tooltip": true,
+        "tooltip-format": "{desc}",
+    },
+#+END_SRC
+
+**** Styling
+
+#+BEGIN_SRC css :tangle waybar/style.css
+#pulseaudio {
+    color: #282a36;
+    background: #ff5555;
+}
+#+END_SRC
+
+*** tray
+
+**** Configuration
+
+#+BEGIN_SRC jsonc :tangle waybar/config.jsonc
+    "tray": {
+        "icon-size": 21,
+        "show-passive-items": true,
+        "spacing": 4,
+        "reverse-direction": false,
+    },
+#+END_SRC
+
+**** Styling
+
+#+BEGIN_SRC css :tangle waybar/style.css
+#tray {
+    background: #44475a;
 }
 #+END_SRC
 

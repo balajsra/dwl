@@ -1,14 +1,65 @@
+window#waybar {
+    background: #282a36;
+}
+
+.module {
+    border-radius: 25px;
+    padding: 0px 3px;
+    font-size: 14px;
+}
+
+#battery {
+    background: #50fa7b;
+    color: #282a36;
+}
+
+#cpu {
+    background: #bd93f9;
+    color: #282a36;
+}
+
+#clock {
+    background: #bd93f9;
+    color: #282a36;
+}
+
+#tags {
+    color: #f8f8f2;
+    background: #44475a;
+}
 #tags button {
-    padding: 0 5px;
-    background: transparent;
-    border-bottom: 3px solid transparent;
+    margin-left: 3px;
+    margin-right: 3px;
+    padding: 0px 3px;
 }
 #tags button.occupied {
-    color: #f1fa8c;
+    background: #f1fa8c;
+    color: #282a36;
 }
 #tags button.focused {
-    color: #bd93f9;
+    background: #bd93f9;
+    color: #282a36;
 }
 #tags button.urgent {
-    color: #ff5555;
+    background: #ff5555;
+    color: #282a36;
+}
+
+#disk {
+    color: #282a36;
+    background: #ff79c6;
+}
+
+#memory {
+    color: #282a36;
+    background: #8be9fd;
+}
+
+#pulseaudio {
+    color: #282a36;
+    background: #ff5555;
+}
+
+#tray {
+    background: #44475a;
 }

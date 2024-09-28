@@ -6,31 +6,91 @@
     "position": "top", // Waybar position (top|bottom|left|right)
     // "height": 25, // Waybar height (to be removed for auto height)
     // "width": 1280, // Waybar width
-    "spacing": 4, // Gaps between modules (4px)
     // Choose the order of the modules
+    "spacing": 4, // Gaps between modules (4px)
+    "mode": "dock",
+    "start_hidden": false,
+    "fixed-center": true,
+    "reload_style_on_change": true,
     "modules-left": [
         "dwl/tags",
-        "pulseaudio",
-        "backlight",
-        "mpd"
     ],
     "modules-center": [
-        "tray"
+        "tray",
     ],
     "modules-right": [
-        "idle_inhibitor",
-        "network",
+        "pulseaudio",
         "cpu",
         "memory",
-        "keyboard-state",
+        "disk",
         "battery",
         "clock"
     ],
+
+    "battery": {
+        "interval": 60,
+        "format": "{icon} {capacity}%",
+        "format-icons": ["󰂎", "󰁺", "󰁻", "󰁼", "󰁽", "󰁾", "󰁿", "󰂀", "󰂁", "󰂂", "󰁹"],
+        "tooltip": true,
+        "tooltip-format": "󱧥  {timeTo}\n󱐋  {power} W\n󱠴  {cycles}\n󱈏  {health}%",
+    },
+
+    "cpu": {
+        "interval": 5,
+        "format": "   {usage}%",
+        "tooltip": true,
+    },
+
+    "clock": {
+        "interval": 60,
+        "format": "󰥔  {:%H:%M}"
+    },
 
     "dwl/tags": {
         "num-tags": 9,
         "tag-labels": [ "󰍩 ₁", "󰠮 ₂", " ₃", "󰿎 ₄", "󰖟 ₅", " ₆", "󰊢 ₇", "󰊖 ₈", " ₉" ],
         "disable-click": false
+    },
+
+    "disk": {
+        "interval": 60,
+        "format": "󰋊  {percentage_used}%",
+        "tooltip": true,
+        "tooltip-format": "Used: {used} ({percentage_used}%)\nFree: {free} ({percentage_free}%)\nTotal: {total}",
+    },
+
+    "memory": {
+        "interval": 5,
+        "format": "  {percentage}%",
+        "tooltip": true,
+        "tooltip-format": "RAM:\n\tUsed: {used} GiB ({percentage}%)\n\tFree: {avail} GiB\n\tTotal: {total} GiB\nSwap:\n\tUsed: {swapUsed} GiB ({swapPercentage}%)\n\tFree: {swapAvail} GiB\n\tTotal: {swapTotal} GiB",
+    },
+
+    "pulseaudio": {
+        "interval": 5,
+        "format": "{icon}  {volume}%",
+        "format-bluetooth": "{icon} 󰂯  {volume}%",
+        "format-muted": "󰝟  muted",
+        "format-icons": {
+            "hdmi": "󰡁",
+            "headset": "󰋎",
+            "speaker": "󰓃",
+            "headphone": "󰋋",
+            "car": "",
+            "hifi": "󰤽",
+            "default": "",
+        },
+        "scroll-step": 5,
+        "on-click": "pavucontrol",
+        "tooltip": true,
+        "tooltip-format": "{desc}",
+    },
+
+    "tray": {
+        "icon-size": 21,
+        "show-passive-items": true,
+        "spacing": 4,
+        "reverse-direction": false,
     },
 
 }
