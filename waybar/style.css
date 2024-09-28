@@ -5,7 +5,8 @@ window#waybar {
 .module {
     border-radius: 25px;
     padding: 0px 3px;
-    font-size: 14px;
+    font-size: 15px;
+    font-family: Ubuntu Nerd Font
 }
 
 #battery {

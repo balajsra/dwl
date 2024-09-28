@@ -567,7 +567,8 @@ window#waybar {
 .module {
     border-radius: 25px;
     padding: 0px 3px;
-    font-size: 14px;
+    font-size: 15px;
+    font-family: Ubuntu Nerd Font
 }
 #+END_SRC
 
@@ -583,7 +584,7 @@ window#waybar {
         "format": "{icon} {capacity}%",
         "format-icons": ["󰂎", "󰁺", "󰁻", "󰁼", "󰁽", "󰁾", "󰁿", "󰂀", "󰂁", "󰂂", "󰁹"],
         "tooltip": true,
-        "tooltip-format": "󱧥  {timeTo}\n󱐋  {power} W\n󱠴  {cycles}\n󱈏  {health}%",
+        "tooltip-format": "󱧥\t{timeTo}\n󱐋\t{power} W\n󱠴\t{cycles}\n󱈏\t{health}%",
     },
 #+END_SRC
 
@@ -603,7 +604,7 @@ window#waybar {
 #+BEGIN_SRC jsonc :tangle waybar/config.jsonc
     "cpu": {
         "interval": 5,
-        "format": "   {usage}%",
+        "format": " {usage}%",
         "tooltip": true,
     },
 #+END_SRC
@@ -624,7 +625,7 @@ window#waybar {
 #+BEGIN_SRC jsonc :tangle waybar/config.jsonc
     "clock": {
         "interval": 60,
-        "format": "󰥔  {:%H:%M}"
+        "format": "󰥔 {:%H:%M}"
     },
 #+END_SRC
 
@@ -682,7 +683,7 @@ window#waybar {
 #+BEGIN_SRC jsonc :tangle waybar/config.jsonc
     "disk": {
         "interval": 60,
-        "format": "󰋊  {percentage_used}%",
+        "format": "󰋊 {percentage_used}%",
         "tooltip": true,
         "tooltip-format": "Used: {used} ({percentage_used}%)\nFree: {free} ({percentage_free}%)\nTotal: {total}",
     },
@@ -704,7 +705,7 @@ window#waybar {
 #+BEGIN_SRC jsonc :tangle waybar/config.jsonc
     "memory": {
         "interval": 5,
-        "format": "  {percentage}%",
+        "format": " {percentage}%",
         "tooltip": true,
         "tooltip-format": "RAM:\n\tUsed: {used} GiB ({percentage}%)\n\tFree: {avail} GiB\n\tTotal: {total} GiB\nSwap:\n\tUsed: {swapUsed} GiB ({swapPercentage}%)\n\tFree: {swapAvail} GiB\n\tTotal: {swapTotal} GiB",
     },
@@ -726,9 +727,9 @@ window#waybar {
 #+BEGIN_SRC jsonc :tangle waybar/config.jsonc
     "pulseaudio": {
         "interval": 5,
-        "format": "{icon}  {volume}%",
-        "format-bluetooth": "{icon} 󰂯  {volume}%",
-        "format-muted": "󰝟  muted",
+        "format": "{icon} {volume}%",
+        "format-bluetooth": "{icon} 󰂯 {volume}%",
+        "format-muted": "󰝟 muted",
         "format-icons": {
             "hdmi": "󰡁",
             "headset": "󰋎",
