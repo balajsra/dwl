@@ -125,6 +125,9 @@ static const int natural_scrolling = 1;
 static const int disable_while_typing = 1;
 static const int left_handed = 0;
 static const int middle_button_emulation = 0;
+#if UNCLUTTER_PATCH
+static const int cursor_timeout = 5;
+#endif // UNCLUTTER_PATCH
 
 /* You can choose between:
 LIBINPUT_CONFIG_SCROLL_NO_SCROLL

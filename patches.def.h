@@ -20,6 +20,8 @@
 
 #define SETUPENV_PATCH 1
 
+#define UNCLUTTER_PATCH 1
+
 #define VANITYGAPS_PATCH 1
 
 #define WARPCURSOR_PATCH 1
