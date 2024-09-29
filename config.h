@@ -33,43 +33,15 @@ static int log_level = WLR_ERROR;
 
 #if SETUPENV_PATCH
 static const Env envs[] = {
-	/* variable                      value */
-	{ "TERM",                        "xterm-256color" },
-	{ "SHELL",                       "/bin/fish" },
-	{ "EDITOR",                      "emacs" },
-	{ "GIT_EDITOR",                  "emacs" },
-	{ "BROWSER",                     "vivaldi-stable" },
-	{ "QT_QPA_PLATFORMTHEME",        "qt6ct" },
-	{ "_JAVA_AWT_WM_NONREPARENTING", "1" },
-	{ "XDG_CURRENT_DESKTOP",         "wlroots" },
+	/* variable			value */
+	{ "XDG_CURRENT_DESKTOP",	"wlroots" },
 };
 #endif // SETUPENV_PATCH
 
 #if AUTOSTART_PATCH
 static const char *const autostart[] = {
-        /* Display / Compositor Setup */
-        "/usr/bin/shikane", NULL,
-        "/usr/bin/bash", "/home/sravan/.azotebg", NULL,
-        "/usr/bin/gammastep", "-x", NULL,
-        /* Background Processes */
-        "/usr/libexec/polkit-gnome-authentication-agent-1", NULL,
-        "/usr/bin/kdeconnectd", "--replace", NULL,
-        "/usr/bin/bash", "/home/sravan/.scripts/dunst.sh", "--on", NULL,
-        "/usr/bin/wl-paste", "--type", "text", "--watch", "cliphist", "store", NULL,
-        "/usr/bin/wl-paste", "--type", "image", "--watch", "cliphist", "store", NULL,
-        /* Tray Applications */
-        "/usr/bin/gammastep-indicator", NULL,
-        "/usr/bin/blueman-applet", NULL,
-        "/usr/bin/nm-applet", NULL,
-        "/usr/bin/kdeconnect-indicator", NULL,
-        "/usr/bin/udiskie", "-a", "-n", "-s", NULL,
-        /* Status Bar */
-        "/usr/bin/sh", "-c", "/home/sravan/.config/dwl/waybar/launch.sh", NULL,
-        /* GUI Applications */
-        "/usr/bin/nextcloud", NULL,
-        "/usr/bin/syncthing-gtk", NULL,
-        "/usr/bin/openrgb", NULL,
-        NULL /* terminate */
+    "wbg", "/path/to/your/image", NULL,
+    NULL /* terminate */
 };
 #endif // AUTOSTART_PATCH
 
