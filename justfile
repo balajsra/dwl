@@ -10,4 +10,4 @@ dwl-rebuild:
 
 # Run waybar with dwl configuration
 dwl-launch-waybar:
-    /usr/bin/waybar -c /home/sravan/.config/dwl/waybar/config.jsonc -s /home/sravan/.config/dwl/waybar/style.css
+    ./waybar/launch.sh

@@ -49,7 +49,6 @@ static const Env envs[] = {
 static const char *const autostart[] = {
         /* Display / Compositor Setup */
         "/usr/bin/shikane", NULL,
-        "/usr/bin/waybar", "-c", "/home/sravan/.config/dwl/waybar/config.jsonc", "-s", "/home/sravan/.config/dwl/waybar/style.css", NULL,
         "/usr/bin/bash", "/home/sravan/.azotebg", NULL,
         "/usr/bin/gammastep", "-x", NULL,
         /* Background Processes */
@@ -64,6 +63,8 @@ static const char *const autostart[] = {
         "/usr/bin/nm-applet", NULL,
         "/usr/bin/kdeconnect-indicator", NULL,
         "/usr/bin/udiskie", "-a", "-n", "-s", NULL,
+        /* Status Bar */
+        "/usr/bin/sh", "-c", "/home/sravan/.config/dwl/waybar/launch.sh", NULL,
         /* GUI Applications */
         "/usr/bin/nextcloud", NULL,
         "/usr/bin/syncthing-gtk", NULL,
