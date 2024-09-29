@@ -292,7 +292,6 @@ static const char *const autostart[] = {
         "/usr/bin/blueman-applet", NULL,
         "/usr/bin/nm-applet", NULL,
         "/usr/bin/kdeconnect-indicator", NULL,
-        "/usr/bin/flameshot", NULL,
         "/usr/bin/udiskie", "-a", "-n", "-s", NULL,
         /* GUI Applications */
         "/usr/bin/nextcloud", NULL,
