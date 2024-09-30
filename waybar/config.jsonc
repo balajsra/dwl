@@ -20,6 +20,7 @@
         "tray",
     ],
     "modules-right": [
+        "group/media-playing",
         "pulseaudio",
         "cpu",
         "memory",
@@ -28,6 +29,16 @@
         "clock",
         "group/dunst",
     ],
+    "group/media-playing": {
+        "orientation": "horizontal",
+        "modules": [
+            "custom/media-playing-change",
+            "custom/media-playing-prev",
+            "custom/media-playing-play-pause",
+            "custom/media-playing-next",
+        ],
+        /* "drawer": {}, */
+    },
     "group/dunst": {
         "orientation": "horizontal",
         "modules": [
@@ -59,7 +70,8 @@
 
     "clock": {
         "interval": 60,
-        "format": "󰥔 {:%H:%M}"
+        "format": "󰥔 {:%H:%M}",
+        "tooltip": false,
     },
 
     "custom/dunst-status": {
@@ -67,7 +79,8 @@
         "restart-interval": 1,
         "on-click": "~/.scripts/dunst.sh --dnd",
         "on-click-right": "~/.scripts/dunst.sh --rofi",
-        "tooltip": false,
+        "tooltip": true,
+        "tooltip-format": "Toggle Do Not Disturb",
     },
     "custom/dunst-clear": {
         "format": "",
@@ -106,6 +119,30 @@
         "format": " {percentage}%",
         "tooltip": true,
         "tooltip-format": "RAM:\n\tUsed: {used} GiB ({percentage}%)\n\tFree: {avail} GiB\n\tTotal: {total} GiB\nSwap:\n\tUsed: {swapUsed} GiB ({swapPercentage}%)\n\tFree: {swapAvail} GiB\n\tTotal: {swapTotal} GiB",
+    },
+
+    "custom/media-playing-change": {
+        "exec": "~/.config/dwl/waybar/scripts/get-media-playing.sh",
+        "return-type": "json",
+        "restart-interval": 1,
+        "on-click": "~/.scripts/playerctl.sh --change",
+        "tooltip": true,
+    },
+    "custom/media-playing-prev": {
+        "format": "󰒮",
+        "on-click": "~/.scripts/playerctl.sh --prev",
+        "tooltip": false,
+    },
+    "custom/media-playing-play-pause": {
+        "exec": "~/.config/dwl/waybar/scripts/get-media-status-icon.sh",
+        "restart-interval": 1,
+        "on-click": "~/.scripts/playerctl.sh --play-pause",
+        "tooltip": false,
+    },
+    "custom/media-playing-next": {
+        "format": "󰒭",
+        "on-click": "~/.scripts/playerctl.sh --next",
+        "tooltip": false,
     },
 
     "custom/power-menu": {

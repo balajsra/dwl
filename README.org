@@ -49,6 +49,7 @@
     - [[#dwl][dwl]]
     - [[#disk][Disk]]
     - [[#memory][Memory]]
+    - [[#playerctl][Playerctl]]
     - [[#power-menu][Power Menu]]
     - [[#pulseaudio][Pulseaudio]]
     - [[#tray][Tray]]
@@ -536,6 +537,7 @@ sleep 5
         "tray",
     ],
     "modules-right": [
+        "group/media-playing",
         "pulseaudio",
         "cpu",
         "memory",
@@ -544,6 +546,16 @@ sleep 5
         "clock",
         "group/dunst",
     ],
+    "group/media-playing": {
+        "orientation": "horizontal",
+        "modules": [
+            "custom/media-playing-change",
+            "custom/media-playing-prev",
+            "custom/media-playing-play-pause",
+            "custom/media-playing-next",
+        ],
+        /* "drawer": {}, */
+    },
     "group/dunst": {
         "orientation": "horizontal",
         "modules": [
@@ -629,7 +641,8 @@ window#waybar {
 #+BEGIN_SRC jsonc :tangle waybar/config.jsonc
     "clock": {
         "interval": 60,
-        "format": "󰥔 {:%H:%M}"
+        "format": "󰥔 {:%H:%M}",
+        "tooltip": false,
     },
 #+END_SRC
 
@@ -652,7 +665,8 @@ window#waybar {
         "restart-interval": 1,
         "on-click": "~/.scripts/dunst.sh --dnd",
         "on-click-right": "~/.scripts/dunst.sh --rofi",
-        "tooltip": false,
+        "tooltip": true,
+        "tooltip-format": "Toggle Do Not Disturb",
     },
     "custom/dunst-clear": {
         "format": "",
@@ -783,6 +797,150 @@ fi
     background: #8be9fd;
     color: #282a36;
 }
+#+END_SRC
+
+*** Playerctl
+
+**** Configuration
+
+#+BEGIN_SRC jsonc :tangle waybar/config.jsonc
+    "custom/media-playing-change": {
+        "exec": "~/.config/dwl/waybar/scripts/get-media-playing.sh",
+        "return-type": "json",
+        "restart-interval": 1,
+        "on-click": "~/.scripts/playerctl.sh --change",
+        "tooltip": true,
+    },
+    "custom/media-playing-prev": {
+        "format": "󰒮",
+        "on-click": "~/.scripts/playerctl.sh --prev",
+        "tooltip": false,
+    },
+    "custom/media-playing-play-pause": {
+        "exec": "~/.config/dwl/waybar/scripts/get-media-status-icon.sh",
+        "restart-interval": 1,
+        "on-click": "~/.scripts/playerctl.sh --play-pause",
+        "tooltip": false,
+    },
+    "custom/media-playing-next": {
+        "format": "󰒭",
+        "on-click": "~/.scripts/playerctl.sh --next",
+        "tooltip": false,
+    },
+#+END_SRC
+
+**** Styling
+
+#+BEGIN_SRC css :tangle waybar/style.css
+#custom-media-playing-change {
+    background: #50fa7b;
+    color: #282a36;
+}
+#custom-media-playing-prev {
+    background: #50fa7b;
+    color: #282a36;
+}
+#custom-media-playing-play-pause {
+    background: #50fa7b;
+    color: #282a36;
+}
+#custom-media-playing-next {
+    background: #50fa7b;
+    color: #282a36;
+}
+#+END_SRC
+
+**** Script
+
+#+BEGIN_SRC shell :shebang #!/usr/bin/env bash :tangle waybar/scripts/get-media-source-icon.sh
+mediaStatus=$(playerctl --player=playerctld metadata 2>&1)
+
+if [[ "$mediaStatus" == "No player could handle this command" ]]; then
+    echo "󰡀"
+else
+    trackid=$(playerctl --player=playerctld metadata --format '{{ mpris:trackid }}')
+    title=$(playerctl --player=playerctld metadata --format '{{ xesam:title }}')
+
+    if grep -q -i "netflix" <<< "$title"; then
+        echo "󰝆"
+    elif grep -q -i "hulu" <<< "$title"; then
+        echo "󰠩"
+    elif grep -q -i "prime video" <<< "$title"; then
+        echo ""
+    elif grep -q -i "youtube tv" <<< "$title"; then
+        echo "󰑈"
+    elif grep -q -i "chromium" <<< "$trackid"; then
+        echo ""
+    elif grep -q -i "vlc" <<< "$trackid"; then
+        echo "󰕼"
+    elif grep -q -i "spotify" <<< "$trackid"; then
+        echo ""
+    else
+        echo "󰡀"
+    fi
+fi
+#+END_SRC
+
+#+BEGIN_SRC shell :shebang #!/usr/bin/env bash :tangle waybar/scripts/get-media-status-icon.sh
+mediaStatus=$(`dirname $0`/get-media-status.sh)
+
+if [[ "$mediaStatus" == "N/A" ]]; then
+    echo "󰐎"
+else
+    if [[ "$mediaStatus" == "Playing" ]]; then
+        echo "󰏤"
+    elif [[ "$mediaStatus" == "Paused" ]]; then
+        echo "󰐊"
+    fi
+fi
+#+END_SRC
+
+#+BEGIN_SRC shell :shebang #!/usr/bin/env bash :tangle waybar/scripts/get-media-status.sh
+mediaStatus=$(playerctl --player=playerctld metadata 2>&1)
+
+if [[ "$mediaStatus" == "No player could handle this command" ]]; then
+    echo "N/A"
+else
+    status=$(playerctl --player=playerctld metadata --format '{{ status }}')
+
+    echo $status
+fi
+#+END_SRC
+
+#+BEGIN_SRC shell :shebang #!/usr/bin/env bash :tangle waybar/scripts/get-media-playing.sh
+mediaSourceIcon=$(`dirname $0`/get-media-source-icon.sh)
+mediaStatus=$(playerctl --player=playerctld metadata 2>&1)
+
+if [[ "$mediaStatus" == "No player could handle this command" ]]; then
+        artist="N/A"
+        title="N/A"
+        album="N/A"
+        status="N/A"
+else
+        artist=$(playerctl --player=playerctld metadata --format '{{ xesam:artist }}')
+        title=$(playerctl --player=playerctld metadata --format '{{ xesam:title }}')
+        album=$(playerctl --player=playerctld metadata --format '{{ xesam:album }}')
+        status=$(playerctl --player=playerctld metadata --format '{{ status }}')
+
+        if [[ $artist == "" ]]; then
+            artist="N/A"
+        fi
+
+        if [[ $title == "" ]]; then
+            title="N/A"
+        fi
+
+        if [[ $album == "" ]]; then
+            album="N/A"
+        fi
+
+        if [[ $status == "" ]]; then
+            status="N/A"
+        fi
+fi
+
+# echo '{"text":"'$mediaSourceIcon'","tooltip":"󰝚\t'$title'\r󰠃\t'$artist'\r󰀥\t'$album'\r󰐎\t'$status'"}' | jq --unbuffered --compact-output
+echo '{"text":"'$mediaSourceIcon'","tooltip":"󰝚\t'$title'\r󰠃\t'$artist'\r󰀥\t'$album'\r󰐎\t'$status'"}'
 #+END_SRC
 
 *** Power Menu
