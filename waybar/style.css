@@ -2,8 +2,8 @@ window#waybar {
     background: #282a36;
 }
 
-.module {
-    border-radius: 25px;
+.module,button {
+    border-radius: 0px;
     padding: 0px 3px;
     font-size: 15px;
     font-family: Ubuntu Nerd Font
@@ -41,11 +41,6 @@ window#waybar {
     color: #282a36;
 }
 
-#custom-power-menu {
-    background: #8be9fd;
-    color: #282a36;
-}
-
 #tags {
     background: #44475a;
     color: #f8f8f2;
@@ -53,7 +48,6 @@ window#waybar {
 #tags button {
     margin-left: 3px;
     margin-right: 3px;
-    padding: 0px 3px;
 }
 #tags button.occupied {
     background: #f1fa8c;
@@ -74,6 +68,11 @@ window#waybar {
 }
 
 #memory {
+    background: #8be9fd;
+    color: #282a36;
+}
+
+#custom-power-menu {
     background: #8be9fd;
     color: #282a36;
 }

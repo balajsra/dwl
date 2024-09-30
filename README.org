@@ -46,10 +46,10 @@
     - [[#cpu][CPU]]
     - [[#clock][Clock]]
     - [[#dunst][Dunst]]
-    - [[#power-menu][Power Menu]]
     - [[#dwl][dwl]]
     - [[#disk][Disk]]
     - [[#memory][Memory]]
+    - [[#power-menu][Power Menu]]
     - [[#pulseaudio][Pulseaudio]]
     - [[#tray][Tray]]
   - [[#end-configuration][End Configuration]]
@@ -567,8 +567,8 @@ window#waybar {
     background: #282a36;
 }
 
-.module {
-    border-radius: 25px;
+.module,button {
+    border-radius: 0px;
     padding: 0px 3px;
     font-size: 15px;
     font-family: Ubuntu Nerd Font
@@ -707,27 +707,6 @@ else
 fi
 #+END_SRC
 
-*** Power Menu
-
-**** Configuration
-
-#+BEGIN_SRC jsonc :tangle waybar/config.jsonc
-    "custom/power-menu": {
-        "format": "󰀻",
-        "on-click": "rofi -show combi",
-        "on-click-right": "~/.scripts/control-center.sh --rofi",
-    },
-#+END_SRC
-
-**** Styling
-
-#+BEGIN_SRC css :tangle waybar/style.css
-#custom-power-menu {
-    background: #8be9fd;
-    color: #282a36;
-}
-#+END_SRC
-
 *** dwl
 
 **** Configuration
@@ -750,7 +729,6 @@ fi
 #tags button {
     margin-left: 3px;
     margin-right: 3px;
-    padding: 0px 3px;
 }
 #tags button.occupied {
     background: #f1fa8c;
@@ -805,6 +783,27 @@ fi
 
 #+BEGIN_SRC css :tangle waybar/style.css
 #memory {
+    background: #8be9fd;
+    color: #282a36;
+}
+#+END_SRC
+
+*** Power Menu
+
+**** Configuration
+
+#+BEGIN_SRC jsonc :tangle waybar/config.jsonc
+    "custom/power-menu": {
+        "format": "󰀻",
+        "on-click": "rofi -show combi",
+        "on-click-right": "~/.scripts/control-center.sh --rofi",
+    },
+#+END_SRC
+
+**** Styling
+
+#+BEGIN_SRC css :tangle waybar/style.css
+#custom-power-menu {
     background: #8be9fd;
     color: #282a36;
 }

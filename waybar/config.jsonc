@@ -88,12 +88,6 @@
         "tooltip-format": "Clear Notification History",
     },
 
-    "custom/power-menu": {
-        "format": "󰀻",
-        "on-click": "rofi -show combi",
-        "on-click-right": "~/.scripts/control-center.sh --rofi",
-    },
-
     "dwl/tags": {
         "num-tags": 9,
         "tag-labels": [ "󰍩 ₁", "󰠮 ₂", " ₃", "󰿎 ₄", "󰖟 ₅", " ₆", "󰊢 ₇", "󰊖 ₈", " ₉" ],
@@ -112,6 +106,12 @@
         "format": " {percentage}%",
         "tooltip": true,
         "tooltip-format": "RAM:\n\tUsed: {used} GiB ({percentage}%)\n\tFree: {avail} GiB\n\tTotal: {total} GiB\nSwap:\n\tUsed: {swapUsed} GiB ({swapPercentage}%)\n\tFree: {swapAvail} GiB\n\tTotal: {swapTotal} GiB",
+    },
+
+    "custom/power-menu": {
+        "format": "󰀻",
+        "on-click": "rofi -show combi",
+        "on-click-right": "~/.scripts/control-center.sh --rofi",
     },
 
     "pulseaudio": {
