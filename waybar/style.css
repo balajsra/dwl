@@ -6,7 +6,8 @@ window#waybar {
     border-radius: 0px;
     padding: 0px 3px;
     font-size: 15px;
-    font-family: Ubuntu Nerd Font
+    font-family: Ubuntu Nerd Font;
+    margin: 0px 0px;
 }
 
 #battery {
@@ -44,10 +45,6 @@ window#waybar {
 #tags {
     background: #44475a;
     color: #f8f8f2;
-}
-#tags button {
-    margin-left: 3px;
-    margin-right: 3px;
 }
 #tags button.occupied {
     background: #f1fa8c;
