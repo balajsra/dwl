@@ -13,6 +13,7 @@
     "fixed-center": true,
     "reload_style_on_change": true,
     "modules-left": [
+        "custom/power-menu",
         "dwl/tags",
     ],
     "modules-center": [
@@ -44,6 +45,12 @@
     "clock": {
         "interval": 60,
         "format": "󰥔 {:%H:%M}"
+    },
+
+    "custom/power-menu": {
+        "format": "󰀻",
+        "on-click": "rofi -show combi",
+        "on-click-right": "~/.scripts/control-center.sh --rofi",
     },
 
     "dwl/tags": {

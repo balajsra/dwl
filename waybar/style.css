@@ -24,9 +24,14 @@ window#waybar {
     color: #282a36;
 }
 
+#custom-power-menu {
+    background: #8be9fd;
+    color: #282a36;
+}
+
 #tags {
-    color: #f8f8f2;
     background: #44475a;
+    color: #f8f8f2;
 }
 #tags button {
     margin-left: 3px;
@@ -47,18 +52,18 @@ window#waybar {
 }
 
 #disk {
-    color: #282a36;
     background: #ff79c6;
+    color: #282a36;
 }
 
 #memory {
-    color: #282a36;
     background: #8be9fd;
+    color: #282a36;
 }
 
 #pulseaudio {
-    color: #282a36;
     background: #ff5555;
+    color: #282a36;
 }
 
 #tray {
