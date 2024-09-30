@@ -42,15 +42,16 @@
     - [[#configuration-1][Configuration]]
     - [[#styling][Styling]]
   - [[#modules][Modules]]
-    - [[#battery][battery]]
-    - [[#cpu][cpu]]
-    - [[#clock][clock]]
-    - [[#custompower-menu][custom/power-menu]]
-    - [[#dwltags][dwl/tags]]
-    - [[#disk][disk]]
-    - [[#memory][memory]]
-    - [[#pulseaudio][pulseaudio]]
-    - [[#tray][tray]]
+    - [[#battery][Battery]]
+    - [[#cpu][CPU]]
+    - [[#clock][Clock]]
+    - [[#dunst][Dunst]]
+    - [[#power-menu][Power Menu]]
+    - [[#dwl][dwl]]
+    - [[#disk][Disk]]
+    - [[#memory][Memory]]
+    - [[#pulseaudio][Pulseaudio]]
+    - [[#tray][Tray]]
   - [[#end-configuration][End Configuration]]
 - [[#justfile][Justfile]]
 
@@ -540,8 +541,23 @@ sleep 5
         "memory",
         "disk",
         "battery",
-        "clock"
+        "clock",
+        "group/dunst",
     ],
+    "group/dunst": {
+        "orientation": "horizontal",
+        "modules": [
+            "custom/dunst-status",
+            "custom/dunst-history-view",
+            "custom/dunst-clear",
+            "custom/dunst-history-clear",
+        ],
+        "drawer": {
+            "transition-duration": 500,
+            "transition-left-to-right": true,
+            "click-to-reveal": false,
+        },
+    },
 #+END_SRC
 
 *** Styling
@@ -561,7 +577,7 @@ window#waybar {
 
 ** Modules
 
-*** battery
+*** Battery
 
 **** Configuration
 
@@ -584,7 +600,7 @@ window#waybar {
 }
 #+END_SRC
 
-*** cpu
+*** CPU
 
 **** Configuration
 
@@ -605,7 +621,7 @@ window#waybar {
 }
 #+END_SRC
 
-*** clock
+*** Clock
 
 **** Configuration
 
@@ -625,7 +641,73 @@ window#waybar {
 }
 #+END_SRC
 
-*** custom/power-menu
+*** Dunst
+
+**** Configuration
+
+#+BEGIN_SRC jsonc :tangle waybar/config.jsonc
+    "custom/dunst-status": {
+        "exec": "~/.config/dwl/waybar/scripts/dunst.sh",
+        "restart-interval": 1,
+        "on-click": "~/.scripts/dunst.sh --dnd",
+        "on-click-right": "~/.scripts/dunst.sh --rofi",
+        "tooltip": false,
+    },
+    "custom/dunst-clear": {
+        "format": "",
+        "on-click": "~/.scripts/dunst.sh --close-all",
+        "tooltip": true,
+        "tooltip-format": "Close Open Notifications",
+    },
+    "custom/dunst-history-view": {
+        "format": "󰋚",
+        "on-click": "~/.scripts/dunst.sh --history",
+        "tooltip": true,
+        "tooltip-format": "View Notification History",
+    },
+    "custom/dunst-history-clear": {
+        "format": "󰎟",
+        "on-click": "~/.scripts/dunst.sh --history-clear",
+        "tooltip": true,
+        "tooltip-format": "Clear Notification History",
+    },
+#+END_SRC
+
+**** Styling
+
+#+BEGIN_SRC css :tangle waybar/style.css
+#custom-dunst-status {
+    background: #50fa7b;
+    color: #282a36;
+}
+#custom-dunst-clear {
+    background: #50fa7b;
+    color: #282a36;
+}
+#custom-dunst-history-view {
+    background: #50fa7b;
+    color: #282a36;
+}
+#custom-dunst-history-clear {
+    background: #50fa7b;
+    color: #282a36;
+}
+#+END_SRC
+
+**** Script
+
+#+BEGIN_SRC shell :shebang #!/usr/bin/env bash :tangle waybar/scripts/dunst.sh
+isPaused=$(dunstctl is-paused)
+notificationCount=$(dunstctl count history)
+
+if [[ "$isPaused" == "true" ]]; then
+    echo "󰂛 $notificationCount"
+else
+    echo "󰂚 $notificationCount"
+fi
+#+END_SRC
+
+*** Power Menu
 
 **** Configuration
 
@@ -646,7 +728,7 @@ window#waybar {
 }
 #+END_SRC
 
-*** dwl/tags
+*** dwl
 
 **** Configuration
 
@@ -684,7 +766,7 @@ window#waybar {
 }
 #+END_SRC
 
-*** disk
+*** Disk
 
 **** Configuration
 
@@ -706,7 +788,7 @@ window#waybar {
 }
 #+END_SRC
 
-*** memory
+*** Memory
 
 **** Configuration
 
@@ -728,7 +810,7 @@ window#waybar {
 }
 #+END_SRC
 
-*** pulseaudio
+*** Pulseaudio
 
 **** Configuration
 
@@ -763,7 +845,7 @@ window#waybar {
 }
 #+END_SRC
 
-*** tray
+*** Tray
 
 **** Configuration
 

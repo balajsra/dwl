@@ -24,6 +24,23 @@ window#waybar {
     color: #282a36;
 }
 
+#custom-dunst-status {
+    background: #50fa7b;
+    color: #282a36;
+}
+#custom-dunst-clear {
+    background: #50fa7b;
+    color: #282a36;
+}
+#custom-dunst-history-view {
+    background: #50fa7b;
+    color: #282a36;
+}
+#custom-dunst-history-clear {
+    background: #50fa7b;
+    color: #282a36;
+}
+
 #custom-power-menu {
     background: #8be9fd;
     color: #282a36;

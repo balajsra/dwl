@@ -25,8 +25,23 @@
         "memory",
         "disk",
         "battery",
-        "clock"
+        "clock",
+        "group/dunst",
     ],
+    "group/dunst": {
+        "orientation": "horizontal",
+        "modules": [
+            "custom/dunst-status",
+            "custom/dunst-history-view",
+            "custom/dunst-clear",
+            "custom/dunst-history-clear",
+        ],
+        "drawer": {
+            "transition-duration": 500,
+            "transition-left-to-right": true,
+            "click-to-reveal": false,
+        },
+    },
 
     "battery": {
         "interval": 60,
@@ -45,6 +60,32 @@
     "clock": {
         "interval": 60,
         "format": "󰥔 {:%H:%M}"
+    },
+
+    "custom/dunst-status": {
+        "exec": "~/.config/dwl/waybar/scripts/dunst.sh",
+        "restart-interval": 1,
+        "on-click": "~/.scripts/dunst.sh --dnd",
+        "on-click-right": "~/.scripts/dunst.sh --rofi",
+        "tooltip": false,
+    },
+    "custom/dunst-clear": {
+        "format": "",
+        "on-click": "~/.scripts/dunst.sh --close-all",
+        "tooltip": true,
+        "tooltip-format": "Close Open Notifications",
+    },
+    "custom/dunst-history-view": {
+        "format": "󰋚",
+        "on-click": "~/.scripts/dunst.sh --history",
+        "tooltip": true,
+        "tooltip-format": "View Notification History",
+    },
+    "custom/dunst-history-clear": {
+        "format": "󰎟",
+        "on-click": "~/.scripts/dunst.sh --history-clear",
+        "tooltip": true,
+        "tooltip-format": "Clear Notification History",
     },
 
     "custom/power-menu": {
