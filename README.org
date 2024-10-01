@@ -52,6 +52,7 @@
     - [[#playerctl][Playerctl]]
     - [[#power-menu][Power Menu]]
     - [[#pulseaudio][Pulseaudio]]
+    - [[#system76-power][System76 Power]]
     - [[#tray][Tray]]
   - [[#end-configuration][End Configuration]]
 - [[#justfile][Justfile]]
@@ -499,8 +500,6 @@ static const Button buttons[] = {
 #+BEGIN_SRC shell :shebang #!/usr/bin/env bash :tangle waybar/launch.sh
 killall waybar
 
-sleep 5
-
 /usr/bin/waybar \
     -c $HOME/.config/dwl/waybar/config.jsonc \
     -s $HOME/.config/dwl/waybar/style.css &
@@ -532,19 +531,20 @@ sleep 5
     "modules-left": [
         "custom/power-menu",
         "dwl/tags",
-    ],
-    "modules-center": [
         "tray",
     ],
-    "modules-right": [
-        "group/media-playing",
+    "modules-center": [
+        "group/dunst",
         "pulseaudio",
+        "group/media-playing",
+    ],
+    "modules-right": [
+        "custom/system76-power",
         "cpu",
         "memory",
         "disk",
         "battery",
         "clock",
-        "group/dunst",
     ],
     "group/media-playing": {
         "orientation": "horizontal",
@@ -554,7 +554,6 @@ sleep 5
             "custom/media-playing-play-pause",
             "custom/media-playing-next",
         ],
-        /* "drawer": {}, */
     },
     "group/dunst": {
         "orientation": "horizontal",
@@ -622,6 +621,7 @@ window#waybar {
         "interval": 5,
         "format": " {usage}%",
         "tooltip": true,
+        "on-click-right": "kitty btop",
     },
 #+END_SRC
 
@@ -629,7 +629,7 @@ window#waybar {
 
 #+BEGIN_SRC css :tangle waybar/style.css
 #cpu {
-    background: #bd93f9;
+    background: #ff79c6;
     color: #282a36;
 }
 #+END_SRC
@@ -765,6 +765,7 @@ fi
         "format": "󰋊 {percentage_used}%",
         "tooltip": true,
         "tooltip-format": "Used: {used} ({percentage_used}%)\nFree: {free} ({percentage_free}%)\nTotal: {total}",
+        "on-click-right": "qdirstat",
     },
 #+END_SRC
 
@@ -772,7 +773,7 @@ fi
 
 #+BEGIN_SRC css :tangle waybar/style.css
 #disk {
-    background: #ff79c6;
+    background: #f1fa8c;
     color: #282a36;
 }
 #+END_SRC
@@ -787,6 +788,7 @@ fi
         "format": " {percentage}%",
         "tooltip": true,
         "tooltip-format": "RAM:\n\tUsed: {used} GiB ({percentage}%)\n\tFree: {avail} GiB\n\tTotal: {total} GiB\nSwap:\n\tUsed: {swapUsed} GiB ({swapPercentage}%)\n\tFree: {swapAvail} GiB\n\tTotal: {swapTotal} GiB",
+        "on-click-right": "kitty btop",
     },
 #+END_SRC
 
@@ -833,19 +835,19 @@ fi
 
 #+BEGIN_SRC css :tangle waybar/style.css
 #custom-media-playing-change {
-    background: #50fa7b;
+    background: #f1fa8c;
     color: #282a36;
 }
 #custom-media-playing-prev {
-    background: #50fa7b;
+    background: #f1fa8c;
     color: #282a36;
 }
 #custom-media-playing-play-pause {
-    background: #50fa7b;
+    background: #f1fa8c;
     color: #282a36;
 }
 #custom-media-playing-next {
-    background: #50fa7b;
+    background: #f1fa8c;
     color: #282a36;
 }
 #+END_SRC
@@ -939,7 +941,6 @@ else
         fi
 fi
 
-# echo '{"text":"'$mediaSourceIcon'","tooltip":"󰝚\t'$title'\r󰠃\t'$artist'\r󰀥\t'$album'\r󰐎\t'$status'"}' | jq --unbuffered --compact-output
 echo '{"text":"'$mediaSourceIcon'","tooltip":"󰝚\t'$title'\r󰠃\t'$artist'\r󰀥\t'$album'\r󰐎\t'$status'"}'
 #+END_SRC
 
@@ -984,9 +985,11 @@ echo '{"text":"'$mediaSourceIcon'","tooltip":"󰝚\t'$title'\r󰠃\t'$artist'\r�
             "default": "",
         },
         "scroll-step": 5,
-        "on-click": "pavucontrol",
+        "on-click": "~/.scripts/pactl.sh --mute",
+        "on-click-right": "~/.scripts/pactl.sh --mixer",
         "tooltip": true,
         "tooltip-format": "{desc}",
+        "scroll-step": 0.25,
     },
 #+END_SRC
 
@@ -994,9 +997,43 @@ echo '{"text":"'$mediaSourceIcon'","tooltip":"󰝚\t'$title'\r󰠃\t'$artist'\r�
 
 #+BEGIN_SRC css :tangle waybar/style.css
 #pulseaudio {
-    background: #ff5555;
+    background: #8be9fd;
     color: #282a36;
 }
+#+END_SRC
+
+*** System76 Power
+
+**** Configuration
+
+#+BEGIN_SRC jsonc :tangle waybar/config.jsonc
+    "custom/system76-power": {
+        "exec": "~/.config/dwl/waybar/scripts/system76-power.sh",
+        "return-type": "json",
+        "restart-interval": 60,
+        "on-click-right": "~/.scripts/cpu-gpu.sh --rofi",
+        "tooltip": true,
+    },
+#+END_SRC
+
+**** Styling
+
+#+BEGIN_SRC css :tangle waybar/style.css
+#custom-system76-power {
+    background: #ffb86c;
+    color: #282a36;
+}
+#+END_SRC
+
+**** Script
+
+#+BEGIN_SRC shell :shebang #!/usr/bin/env bash :tangle waybar/scripts/system76-power.sh
+profile="$(sudo system76-power profile | sed -z '$ s/\n$//' | tr '\n' '\r')"
+graphics="$(sudo system76-power graphics)"
+graphicsPower="$(sudo system76-power graphics power)"
+chargeThresholds="$(sudo system76-power charge-thresholds | sed -z '$ s/\n$//' | tr '\n' '\r')"
+
+echo '{"text":"󰢮 '$graphics'","tooltip":"󰢮\t'$graphics'\r󰐥\t'$graphicsPower'\r\r  Profile\r'$profile'\r\r󰚥 Charge Thresholds\r'$chargeThresholds'"}'
 #+END_SRC
 
 *** Tray

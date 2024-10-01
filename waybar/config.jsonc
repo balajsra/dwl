@@ -15,19 +15,20 @@
     "modules-left": [
         "custom/power-menu",
         "dwl/tags",
-    ],
-    "modules-center": [
         "tray",
     ],
-    "modules-right": [
-        "group/media-playing",
+    "modules-center": [
+        "group/dunst",
         "pulseaudio",
+        "group/media-playing",
+    ],
+    "modules-right": [
+        "custom/system76-power",
         "cpu",
         "memory",
         "disk",
         "battery",
         "clock",
-        "group/dunst",
     ],
     "group/media-playing": {
         "orientation": "horizontal",
@@ -37,7 +38,6 @@
             "custom/media-playing-play-pause",
             "custom/media-playing-next",
         ],
-        /* "drawer": {}, */
     },
     "group/dunst": {
         "orientation": "horizontal",
@@ -66,6 +66,7 @@
         "interval": 5,
         "format": " {usage}%",
         "tooltip": true,
+        "on-click-right": "kitty btop",
     },
 
     "clock": {
@@ -112,6 +113,7 @@
         "format": "󰋊 {percentage_used}%",
         "tooltip": true,
         "tooltip-format": "Used: {used} ({percentage_used}%)\nFree: {free} ({percentage_free}%)\nTotal: {total}",
+        "on-click-right": "qdirstat",
     },
 
     "memory": {
@@ -119,6 +121,7 @@
         "format": " {percentage}%",
         "tooltip": true,
         "tooltip-format": "RAM:\n\tUsed: {used} GiB ({percentage}%)\n\tFree: {avail} GiB\n\tTotal: {total} GiB\nSwap:\n\tUsed: {swapUsed} GiB ({swapPercentage}%)\n\tFree: {swapAvail} GiB\n\tTotal: {swapTotal} GiB",
+        "on-click-right": "kitty btop",
     },
 
     "custom/media-playing-change": {
@@ -166,9 +169,19 @@
             "default": "",
         },
         "scroll-step": 5,
-        "on-click": "pavucontrol",
+        "on-click": "~/.scripts/pactl.sh --mute",
+        "on-click-right": "~/.scripts/pactl.sh --mixer",
         "tooltip": true,
         "tooltip-format": "{desc}",
+        "scroll-step": 0.25,
+    },
+
+    "custom/system76-power": {
+        "exec": "~/.config/dwl/waybar/scripts/system76-power.sh",
+        "return-type": "json",
+        "restart-interval": 60,
+        "on-click-right": "~/.scripts/cpu-gpu.sh --rofi",
+        "tooltip": true,
     },
 
     "tray": {

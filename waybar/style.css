@@ -16,7 +16,7 @@ window#waybar {
 }
 
 #cpu {
-    background: #bd93f9;
+    background: #ff79c6;
     color: #282a36;
 }
 
@@ -60,7 +60,7 @@ window#waybar {
 }
 
 #disk {
-    background: #ff79c6;
+    background: #f1fa8c;
     color: #282a36;
 }
 
@@ -70,19 +70,19 @@ window#waybar {
 }
 
 #custom-media-playing-change {
-    background: #50fa7b;
+    background: #f1fa8c;
     color: #282a36;
 }
 #custom-media-playing-prev {
-    background: #50fa7b;
+    background: #f1fa8c;
     color: #282a36;
 }
 #custom-media-playing-play-pause {
-    background: #50fa7b;
+    background: #f1fa8c;
     color: #282a36;
 }
 #custom-media-playing-next {
-    background: #50fa7b;
+    background: #f1fa8c;
     color: #282a36;
 }
 
@@ -92,7 +92,12 @@ window#waybar {
 }
 
 #pulseaudio {
-    background: #ff5555;
+    background: #8be9fd;
+    color: #282a36;
+}
+
+#custom-system76-power {
+    background: #ffb86c;
     color: #282a36;
 }
 
