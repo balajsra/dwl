@@ -641,8 +641,28 @@ window#waybar {
 #+BEGIN_SRC jsonc :tangle waybar/config.jsonc
     "clock": {
         "interval": 60,
-        "format": "󰥔 {:%H:%M}",
-        "tooltip": false,
+        "format": "󰥔 {:%I:%M %p}",
+        "tooltip": true,
+        "tooltip-format": "<tt><small>{calendar}</small></tt>",
+        "calendar": {
+            "mode"          : "month",
+            "mode-mon-col"  : 3,
+            "weeks-pos"     : "left",
+            "on-scroll"     : 1,
+            "format": {
+                "months":     "<span color='#50fa7b'><b>{}</b></span>",
+                "days":       "<span color='#f8f8f2'><b>{}</b></span>",
+                "weeks":      "<span color='#8be9fd'><b>W{}</b></span>",
+                "weekdays":   "<span color='#f1fa8c'><b>{}</b></span>",
+                "today":      "<span color='#bd93f9'><b><u>{}</u></b></span>"
+            },
+        },
+        "actions": {
+            "on-click": "mode",
+            "on-click-right": "shift_reset",
+            "on-scroll-up": "shift_up",
+            "on-scroll-down": "shift_down",
+        },
     },
 #+END_SRC
 
