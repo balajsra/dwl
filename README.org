@@ -530,13 +530,13 @@ killall waybar
     "reload_style_on_change": true,
     "modules-left": [
         "custom/power-menu",
-        "dwl/tags",
-        "group/media-playing",
+        "group/dwl",
     ],
     "modules-center": [
         "tray",
     ],
     "modules-right": [
+        "group/media-playing",
         "pulseaudio",
         "custom/system76-power",
         "cpu",
@@ -546,6 +546,14 @@ killall waybar
         "clock",
         "group/dunst",
     ],
+    "group/dwl": {
+        "orientation": "inherit",
+        "modules": [
+            "dwl/tags",
+            "dwl/window#title",
+            "dwl/window#layout",
+        ],
+    },
     "group/media-playing": {
         "orientation": "inherit",
         "modules": [
@@ -752,6 +760,20 @@ fi
         "tag-labels": [ "󰍩 ₁", "󰠮 ₂", " ₃", "󰿎 ₄", "󰖟 ₅", " ₆", "󰊢 ₇", "󰊖 ₈", " ₉" ],
         "disable-click": false
     },
+    "dwl/window#title": {
+        "format": "{title}",
+        "all-outputs": false,
+        "icon": true,
+        "icon-size": 21,
+        "tooltip": true,
+        "max-length": 30,
+    },
+    "dwl/window#layout": {
+        "format": "{layout}",
+        "tooltip": false,
+        "all-outputs": false,
+        "icon": false,
+    },
 #+END_SRC
 
 **** Styling
@@ -771,6 +793,14 @@ fi
 }
 #tags button.urgent {
     background: #ff5555;
+    color: #282a36;
+}
+#window.title {
+    background: #8be9fd;
+    color: #282a36;
+}
+#window.layout {
+    background: #f1fa8c;
     color: #282a36;
 }
 #+END_SRC
@@ -855,19 +885,19 @@ fi
 
 #+BEGIN_SRC css :tangle waybar/style.css
 #custom-media-playing-change {
-    background: #50fa7b;
+    background: #ff79c6;
     color: #282a36;
 }
 #custom-media-playing-prev {
-    background: #50fa7b;
+    background: #ff79c6;
     color: #282a36;
 }
 #custom-media-playing-play-pause {
-    background: #50fa7b;
+    background: #ff79c6;
     color: #282a36;
 }
 #custom-media-playing-next {
-    background: #50fa7b;
+    background: #ff79c6;
     color: #282a36;
 }
 #+END_SRC
@@ -1017,7 +1047,7 @@ echo '{"text":"'$mediaSourceIcon'","tooltip":"󰝚\t'$title'\r󰠃\t'$artist'\r�
 
 #+BEGIN_SRC css :tangle waybar/style.css
 #pulseaudio {
-    background: #ff5555;
+    background: #bd93f9;
     color: #282a36;
 }
 #+END_SRC

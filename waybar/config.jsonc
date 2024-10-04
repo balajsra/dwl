@@ -14,13 +14,13 @@
     "reload_style_on_change": true,
     "modules-left": [
         "custom/power-menu",
-        "dwl/tags",
-        "group/media-playing",
+        "group/dwl",
     ],
     "modules-center": [
         "tray",
     ],
     "modules-right": [
+        "group/media-playing",
         "pulseaudio",
         "custom/system76-power",
         "cpu",
@@ -30,6 +30,14 @@
         "clock",
         "group/dunst",
     ],
+    "group/dwl": {
+        "orientation": "inherit",
+        "modules": [
+            "dwl/tags",
+            "dwl/window#title",
+            "dwl/window#layout",
+        ],
+    },
     "group/media-playing": {
         "orientation": "inherit",
         "modules": [
@@ -126,6 +134,20 @@
         "num-tags": 9,
         "tag-labels": [ "󰍩 ₁", "󰠮 ₂", " ₃", "󰿎 ₄", "󰖟 ₅", " ₆", "󰊢 ₇", "󰊖 ₈", " ₉" ],
         "disable-click": false
+    },
+    "dwl/window#title": {
+        "format": "{title}",
+        "all-outputs": false,
+        "icon": true,
+        "icon-size": 21,
+        "tooltip": true,
+        "max-length": 30,
+    },
+    "dwl/window#layout": {
+        "format": "{layout}",
+        "tooltip": false,
+        "all-outputs": false,
+        "icon": false,
     },
 
     "disk": {

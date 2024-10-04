@@ -58,6 +58,14 @@ window#waybar {
     background: #ff5555;
     color: #282a36;
 }
+#window.title {
+    background: #8be9fd;
+    color: #282a36;
+}
+#window.layout {
+    background: #f1fa8c;
+    color: #282a36;
+}
 
 #disk {
     background: #f1fa8c;
@@ -70,19 +78,19 @@ window#waybar {
 }
 
 #custom-media-playing-change {
-    background: #50fa7b;
+    background: #ff79c6;
     color: #282a36;
 }
 #custom-media-playing-prev {
-    background: #50fa7b;
+    background: #ff79c6;
     color: #282a36;
 }
 #custom-media-playing-play-pause {
-    background: #50fa7b;
+    background: #ff79c6;
     color: #282a36;
 }
 #custom-media-playing-next {
-    background: #50fa7b;
+    background: #ff79c6;
     color: #282a36;
 }
 
@@ -92,7 +100,7 @@ window#waybar {
 }
 
 #pulseaudio {
-    background: #ff5555;
+    background: #bd93f9;
     color: #282a36;
 }
 
