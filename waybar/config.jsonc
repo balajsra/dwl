@@ -13,7 +13,7 @@
     "fixed-center": true,
     "reload_style_on_change": true,
     "modules-left": [
-        "custom/power-menu",
+        "group/power-menu",
         "group/dwl",
     ],
     "modules-center": [
@@ -30,6 +30,22 @@
         "clock",
         "group/dunst",
     ],
+    "group/power-menu": {
+        "orientation": "inherit",
+        "modules": [
+            "custom/power-menu-launcher",
+            "custom/power-menu-shutdown",
+            "custom/power-menu-reboot",
+            "custom/power-menu-sleep",
+            "custom/power-menu-lock",
+            "custom/power-menu-logout",
+        ],
+        "drawer": {
+            "transition-duration": 500,
+            "transition-left-to-right": true,
+            "click-to-reveal": false,
+        },
+    },
     "group/dwl": {
         "orientation": "inherit",
         "modules": [
@@ -190,10 +206,42 @@
         "tooltip": false,
     },
 
-    "custom/power-menu": {
-        "format": "󰀻",
+    "custom/power-menu-launcher": {
+        "format": "",
         "on-click": "rofi -show combi",
         "on-click-right": "~/.scripts/control-center.sh --rofi",
+        "tooltip": true,
+        "tooltip-format": "Application Launcher",
+    },
+    "custom/power-menu-shutdown": {
+        "format": "",
+        "on-click": "~/.scripts/session.sh --shutdown",
+        "tooltip": true,
+        "tooltip-format": "Shutdown",
+    },
+    "custom/power-menu-reboot": {
+        "format": "",
+        "on-click": "~/.scripts/session.sh --reboot",
+        "tooltip": true,
+        "tooltip-format": "Reboot",
+    },
+    "custom/power-menu-sleep": {
+        "format": "⏾",
+        "on-click": "~/.scripts/session.sh --sleep",
+        "tooltip": true,
+        "tooltip-format": "Sleep",
+    },
+    "custom/power-menu-lock": {
+        "format": "",
+        "on-click": "~/.scripts/session.sh --lock",
+        "tooltip": true,
+        "tooltip-format": "Lock",
+    },
+    "custom/power-menu-logout": {
+        "format": "",
+        "on-click": "~/.scripts/session.sh --logout",
+        "tooltip": true,
+        "tooltip-format": "Logout",
     },
 
     "pulseaudio": {

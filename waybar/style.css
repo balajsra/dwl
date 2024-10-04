@@ -94,9 +94,29 @@ window#waybar {
     color: #ff79c6;
 }
 
-#custom-power-menu {
+#custom-power-menu-launcher {
     background: transparent;
     color: #8be9fd;
+}
+#custom-power-menu-shutdown {
+    background: transparent;
+    color: #ff5555;
+}
+#custom-power-menu-reboot {
+    background: transparent;
+    color: #50fa7b;
+}
+#custom-power-menu-sleep {
+    background: transparent;
+    color: #f1fa8c;
+}
+#custom-power-menu-lock {
+    background: transparent;
+    color: #bd93f9;
+}
+#custom-power-menu-logout {
+    background: transparent;
+    color: #ffb86c;
 }
 
 #pulseaudio {

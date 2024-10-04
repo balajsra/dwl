@@ -529,7 +529,7 @@ killall waybar
     "fixed-center": true,
     "reload_style_on_change": true,
     "modules-left": [
-        "custom/power-menu",
+        "group/power-menu",
         "group/dwl",
     ],
     "modules-center": [
@@ -546,6 +546,22 @@ killall waybar
         "clock",
         "group/dunst",
     ],
+    "group/power-menu": {
+        "orientation": "inherit",
+        "modules": [
+            "custom/power-menu-launcher",
+            "custom/power-menu-shutdown",
+            "custom/power-menu-reboot",
+            "custom/power-menu-sleep",
+            "custom/power-menu-lock",
+            "custom/power-menu-logout",
+        ],
+        "drawer": {
+            "transition-duration": 500,
+            "transition-left-to-right": true,
+            "click-to-reveal": false,
+        },
+    },
     "group/dwl": {
         "orientation": "inherit",
         "modules": [
@@ -999,19 +1015,71 @@ echo '{"text":"'$mediaSourceIcon'","tooltip":"󰝚\t'$title'\r󰠃\t'$artist'\r�
 **** Configuration
 
 #+BEGIN_SRC jsonc :tangle waybar/config.jsonc
-    "custom/power-menu": {
-        "format": "󰀻",
+    "custom/power-menu-launcher": {
+        "format": "",
         "on-click": "rofi -show combi",
         "on-click-right": "~/.scripts/control-center.sh --rofi",
+        "tooltip": true,
+        "tooltip-format": "Application Launcher",
+    },
+    "custom/power-menu-shutdown": {
+        "format": "",
+        "on-click": "~/.scripts/session.sh --shutdown",
+        "tooltip": true,
+        "tooltip-format": "Shutdown",
+    },
+    "custom/power-menu-reboot": {
+        "format": "",
+        "on-click": "~/.scripts/session.sh --reboot",
+        "tooltip": true,
+        "tooltip-format": "Reboot",
+    },
+    "custom/power-menu-sleep": {
+        "format": "⏾",
+        "on-click": "~/.scripts/session.sh --sleep",
+        "tooltip": true,
+        "tooltip-format": "Sleep",
+    },
+    "custom/power-menu-lock": {
+        "format": "",
+        "on-click": "~/.scripts/session.sh --lock",
+        "tooltip": true,
+        "tooltip-format": "Lock",
+    },
+    "custom/power-menu-logout": {
+        "format": "",
+        "on-click": "~/.scripts/session.sh --logout",
+        "tooltip": true,
+        "tooltip-format": "Logout",
     },
 #+END_SRC
 
 **** Styling
 
 #+BEGIN_SRC css :tangle waybar/style.css
-#custom-power-menu {
+#custom-power-menu-launcher {
     background: transparent;
     color: #8be9fd;
+}
+#custom-power-menu-shutdown {
+    background: transparent;
+    color: #ff5555;
+}
+#custom-power-menu-reboot {
+    background: transparent;
+    color: #50fa7b;
+}
+#custom-power-menu-sleep {
+    background: transparent;
+    color: #f1fa8c;
+}
+#custom-power-menu-lock {
+    background: transparent;
+    color: #bd93f9;
+}
+#custom-power-menu-logout {
+    background: transparent;
+    color: #ffb86c;
 }
 #+END_SRC
 
