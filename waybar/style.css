@@ -11,12 +11,12 @@ window#waybar {
 }
 
 #battery {
-    background: #50fa7b;
+    background: #ff79c6;
     color: #282a36;
 }
 
 #cpu {
-    background: #ff79c6;
+    background: #ffb86c;
     color: #282a36;
 }
 
@@ -70,19 +70,19 @@ window#waybar {
 }
 
 #custom-media-playing-change {
-    background: #f1fa8c;
+    background: #50fa7b;
     color: #282a36;
 }
 #custom-media-playing-prev {
-    background: #f1fa8c;
+    background: #50fa7b;
     color: #282a36;
 }
 #custom-media-playing-play-pause {
-    background: #f1fa8c;
+    background: #50fa7b;
     color: #282a36;
 }
 #custom-media-playing-next {
-    background: #f1fa8c;
+    background: #50fa7b;
     color: #282a36;
 }
 
@@ -92,12 +92,12 @@ window#waybar {
 }
 
 #pulseaudio {
-    background: #8be9fd;
+    background: #ff5555;
     color: #282a36;
 }
 
 #custom-system76-power {
-    background: #ffb86c;
+    background: #50fa7b;
     color: #282a36;
 }
 

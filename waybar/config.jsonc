@@ -15,23 +15,23 @@
     "modules-left": [
         "custom/power-menu",
         "dwl/tags",
-        "tray",
-    ],
-    "modules-center": [
-        "group/dunst",
-        "pulseaudio",
         "group/media-playing",
     ],
+    "modules-center": [
+        "tray",
+    ],
     "modules-right": [
+        "pulseaudio",
         "custom/system76-power",
         "cpu",
         "memory",
         "disk",
         "battery",
         "clock",
+        "group/dunst",
     ],
     "group/media-playing": {
-        "orientation": "horizontal",
+        "orientation": "inherit",
         "modules": [
             "custom/media-playing-change",
             "custom/media-playing-prev",
@@ -40,7 +40,7 @@
         ],
     },
     "group/dunst": {
-        "orientation": "horizontal",
+        "orientation": "inherit",
         "modules": [
             "custom/dunst-status",
             "custom/dunst-history-view",

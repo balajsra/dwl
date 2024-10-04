@@ -531,23 +531,23 @@ killall waybar
     "modules-left": [
         "custom/power-menu",
         "dwl/tags",
-        "tray",
-    ],
-    "modules-center": [
-        "group/dunst",
-        "pulseaudio",
         "group/media-playing",
     ],
+    "modules-center": [
+        "tray",
+    ],
     "modules-right": [
+        "pulseaudio",
         "custom/system76-power",
         "cpu",
         "memory",
         "disk",
         "battery",
         "clock",
+        "group/dunst",
     ],
     "group/media-playing": {
-        "orientation": "horizontal",
+        "orientation": "inherit",
         "modules": [
             "custom/media-playing-change",
             "custom/media-playing-prev",
@@ -556,7 +556,7 @@ killall waybar
         ],
     },
     "group/dunst": {
-        "orientation": "horizontal",
+        "orientation": "inherit",
         "modules": [
             "custom/dunst-status",
             "custom/dunst-history-view",
@@ -607,7 +607,7 @@ window#waybar {
 
 #+BEGIN_SRC css :tangle waybar/style.css
 #battery {
-    background: #50fa7b;
+    background: #ff79c6;
     color: #282a36;
 }
 #+END_SRC
@@ -629,7 +629,7 @@ window#waybar {
 
 #+BEGIN_SRC css :tangle waybar/style.css
 #cpu {
-    background: #ff79c6;
+    background: #ffb86c;
     color: #282a36;
 }
 #+END_SRC
@@ -855,19 +855,19 @@ fi
 
 #+BEGIN_SRC css :tangle waybar/style.css
 #custom-media-playing-change {
-    background: #f1fa8c;
+    background: #50fa7b;
     color: #282a36;
 }
 #custom-media-playing-prev {
-    background: #f1fa8c;
+    background: #50fa7b;
     color: #282a36;
 }
 #custom-media-playing-play-pause {
-    background: #f1fa8c;
+    background: #50fa7b;
     color: #282a36;
 }
 #custom-media-playing-next {
-    background: #f1fa8c;
+    background: #50fa7b;
     color: #282a36;
 }
 #+END_SRC
@@ -1017,7 +1017,7 @@ echo '{"text":"'$mediaSourceIcon'","tooltip":"󰝚\t'$title'\r󰠃\t'$artist'\r�
 
 #+BEGIN_SRC css :tangle waybar/style.css
 #pulseaudio {
-    background: #8be9fd;
+    background: #ff5555;
     color: #282a36;
 }
 #+END_SRC
@@ -1040,7 +1040,7 @@ echo '{"text":"'$mediaSourceIcon'","tooltip":"󰝚\t'$title'\r󰠃\t'$artist'\r�
 
 #+BEGIN_SRC css :tangle waybar/style.css
 #custom-system76-power {
-    background: #ffb86c;
+    background: #50fa7b;
     color: #282a36;
 }
 #+END_SRC
