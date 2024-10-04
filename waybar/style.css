@@ -11,104 +11,104 @@ window#waybar {
 }
 
 #battery {
-    background: #ff79c6;
-    color: #282a36;
+    background: transparent;
+    color: #ff79c6;
 }
 
 #cpu {
-    background: #ffb86c;
-    color: #282a36;
+    background: transparent;
+    color: #ffb86c;
 }
 
 #clock {
-    background: #bd93f9;
-    color: #282a36;
+    background: transparent;
+    color: #bd93f9;
 }
 
 #custom-dunst-status {
-    background: #50fa7b;
-    color: #282a36;
+    background: transparent;
+    color: #50fa7b;
 }
 #custom-dunst-clear {
-    background: #50fa7b;
-    color: #282a36;
+    background: transparent;
+    color: #50fa7b;
 }
 #custom-dunst-history-view {
-    background: #50fa7b;
-    color: #282a36;
+    background: transparent;
+    color: #50fa7b;
 }
 #custom-dunst-history-clear {
-    background: #50fa7b;
-    color: #282a36;
+    background: transparent;
+    color: #50fa7b;
 }
 
-#tags {
-    background: #44475a;
-    color: #f8f8f2;
+#tags button {
+    background: transparent;
+    color: #44475a;
 }
 #tags button.occupied {
-    background: #f1fa8c;
-    color: #282a36;
+    background: transparent;
+    color: #f1fa8c;
 }
 #tags button.focused {
-    background: #bd93f9;
-    color: #282a36;
+    background: transparent;
+    color: #bd93f9;
 }
 #tags button.urgent {
-    background: #ff5555;
-    color: #282a36;
+    background: transparent;
+    color: #ff5555;
 }
 #window.title {
-    background: #8be9fd;
-    color: #282a36;
+    background: transparent;
+    color: #f8f8f2;
 }
 #window.layout {
-    background: #f1fa8c;
-    color: #282a36;
+    background: transparent;
+    color: #50fa7b;
 }
 
 #disk {
-    background: #f1fa8c;
-    color: #282a36;
+    background: transparent;
+    color: #f1fa8c;
 }
 
 #memory {
-    background: #8be9fd;
-    color: #282a36;
+    background: transparent;
+    color: #8be9fd;
 }
 
-#custom-media-playing-change {
-    background: #ff79c6;
-    color: #282a36;
+#custom-media-playing-source {
+    background: transparent;
+    color: #ff79c6;
 }
 #custom-media-playing-prev {
-    background: #ff79c6;
-    color: #282a36;
+    background: transparent;
+    color: #ff79c6;
 }
 #custom-media-playing-play-pause {
-    background: #ff79c6;
-    color: #282a36;
+    background: transparent;
+    color: #ff79c6;
 }
 #custom-media-playing-next {
-    background: #ff79c6;
-    color: #282a36;
+    background: transparent;
+    color: #ff79c6;
 }
 
 #custom-power-menu {
-    background: #8be9fd;
-    color: #282a36;
+    background: transparent;
+    color: #8be9fd;
 }
 
 #pulseaudio {
-    background: #bd93f9;
-    color: #282a36;
+    background: transparent;
+    color: #bd93f9;
 }
 
 #custom-system76-power {
-    background: #50fa7b;
-    color: #282a36;
+    background: transparent;
+    color: #50fa7b;
 }
 
 #tray {
-    background: #44475a;
+    background: transparent;
 }

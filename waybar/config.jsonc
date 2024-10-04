@@ -41,7 +41,7 @@
     "group/media-playing": {
         "orientation": "inherit",
         "modules": [
-            "custom/media-playing-change",
+            "custom/media-playing-source",
             "custom/media-playing-prev",
             "custom/media-playing-play-pause",
             "custom/media-playing-next",
@@ -166,7 +166,7 @@
         "on-click-right": "kitty btop",
     },
 
-    "custom/media-playing-change": {
+    "custom/media-playing-source": {
         "exec": "~/.config/dwl/waybar/scripts/get-media-playing.sh",
         "return-type": "json",
         "restart-interval": 1,

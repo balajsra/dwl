@@ -557,7 +557,7 @@ killall waybar
     "group/media-playing": {
         "orientation": "inherit",
         "modules": [
-            "custom/media-playing-change",
+            "custom/media-playing-source",
             "custom/media-playing-prev",
             "custom/media-playing-play-pause",
             "custom/media-playing-next",
@@ -615,8 +615,8 @@ window#waybar {
 
 #+BEGIN_SRC css :tangle waybar/style.css
 #battery {
-    background: #ff79c6;
-    color: #282a36;
+    background: transparent;
+    color: #ff79c6;
 }
 #+END_SRC
 
@@ -637,8 +637,8 @@ window#waybar {
 
 #+BEGIN_SRC css :tangle waybar/style.css
 #cpu {
-    background: #ffb86c;
-    color: #282a36;
+    background: transparent;
+    color: #ffb86c;
 }
 #+END_SRC
 
@@ -678,8 +678,8 @@ window#waybar {
 
 #+BEGIN_SRC css :tangle waybar/style.css
 #clock {
-    background: #bd93f9;
-    color: #282a36;
+    background: transparent;
+    color: #bd93f9;
 }
 #+END_SRC
 
@@ -720,20 +720,20 @@ window#waybar {
 
 #+BEGIN_SRC css :tangle waybar/style.css
 #custom-dunst-status {
-    background: #50fa7b;
-    color: #282a36;
+    background: transparent;
+    color: #50fa7b;
 }
 #custom-dunst-clear {
-    background: #50fa7b;
-    color: #282a36;
+    background: transparent;
+    color: #50fa7b;
 }
 #custom-dunst-history-view {
-    background: #50fa7b;
-    color: #282a36;
+    background: transparent;
+    color: #50fa7b;
 }
 #custom-dunst-history-clear {
-    background: #50fa7b;
-    color: #282a36;
+    background: transparent;
+    color: #50fa7b;
 }
 #+END_SRC
 
@@ -779,29 +779,29 @@ fi
 **** Styling
 
 #+BEGIN_SRC css :tangle waybar/style.css
-#tags {
-    background: #44475a;
-    color: #f8f8f2;
+#tags button {
+    background: transparent;
+    color: #44475a;
 }
 #tags button.occupied {
-    background: #f1fa8c;
-    color: #282a36;
+    background: transparent;
+    color: #f1fa8c;
 }
 #tags button.focused {
-    background: #bd93f9;
-    color: #282a36;
+    background: transparent;
+    color: #bd93f9;
 }
 #tags button.urgent {
-    background: #ff5555;
-    color: #282a36;
+    background: transparent;
+    color: #ff5555;
 }
 #window.title {
-    background: #8be9fd;
-    color: #282a36;
+    background: transparent;
+    color: #f8f8f2;
 }
 #window.layout {
-    background: #f1fa8c;
-    color: #282a36;
+    background: transparent;
+    color: #50fa7b;
 }
 #+END_SRC
 
@@ -823,8 +823,8 @@ fi
 
 #+BEGIN_SRC css :tangle waybar/style.css
 #disk {
-    background: #f1fa8c;
-    color: #282a36;
+    background: transparent;
+    color: #f1fa8c;
 }
 #+END_SRC
 
@@ -846,8 +846,8 @@ fi
 
 #+BEGIN_SRC css :tangle waybar/style.css
 #memory {
-    background: #8be9fd;
-    color: #282a36;
+    background: transparent;
+    color: #8be9fd;
 }
 #+END_SRC
 
@@ -856,7 +856,7 @@ fi
 **** Configuration
 
 #+BEGIN_SRC jsonc :tangle waybar/config.jsonc
-    "custom/media-playing-change": {
+    "custom/media-playing-source": {
         "exec": "~/.config/dwl/waybar/scripts/get-media-playing.sh",
         "return-type": "json",
         "restart-interval": 1,
@@ -884,21 +884,21 @@ fi
 **** Styling
 
 #+BEGIN_SRC css :tangle waybar/style.css
-#custom-media-playing-change {
-    background: #ff79c6;
-    color: #282a36;
+#custom-media-playing-source {
+    background: transparent;
+    color: #ff79c6;
 }
 #custom-media-playing-prev {
-    background: #ff79c6;
-    color: #282a36;
+    background: transparent;
+    color: #ff79c6;
 }
 #custom-media-playing-play-pause {
-    background: #ff79c6;
-    color: #282a36;
+    background: transparent;
+    color: #ff79c6;
 }
 #custom-media-playing-next {
-    background: #ff79c6;
-    color: #282a36;
+    background: transparent;
+    color: #ff79c6;
 }
 #+END_SRC
 
@@ -1010,8 +1010,8 @@ echo '{"text":"'$mediaSourceIcon'","tooltip":"󰝚\t'$title'\r󰠃\t'$artist'\r�
 
 #+BEGIN_SRC css :tangle waybar/style.css
 #custom-power-menu {
-    background: #8be9fd;
-    color: #282a36;
+    background: transparent;
+    color: #8be9fd;
 }
 #+END_SRC
 
@@ -1047,8 +1047,8 @@ echo '{"text":"'$mediaSourceIcon'","tooltip":"󰝚\t'$title'\r󰠃\t'$artist'\r�
 
 #+BEGIN_SRC css :tangle waybar/style.css
 #pulseaudio {
-    background: #bd93f9;
-    color: #282a36;
+    background: transparent;
+    color: #bd93f9;
 }
 #+END_SRC
 
@@ -1070,8 +1070,8 @@ echo '{"text":"'$mediaSourceIcon'","tooltip":"󰝚\t'$title'\r󰠃\t'$artist'\r�
 
 #+BEGIN_SRC css :tangle waybar/style.css
 #custom-system76-power {
-    background: #50fa7b;
-    color: #282a36;
+    background: transparent;
+    color: #50fa7b;
 }
 #+END_SRC
 
@@ -1103,7 +1103,7 @@ echo '{"text":"󰢮 '$graphics'","tooltip":"󰢮\t'$graphics'\r󰐥\t'$graphicsP
 
 #+BEGIN_SRC css :tangle waybar/style.css
 #tray {
-    background: #44475a;
+    background: transparent;
 }
 #+END_SRC
 
