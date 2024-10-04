@@ -48,6 +48,7 @@
     - [[#dunst][Dunst]]
     - [[#dwl][dwl]]
     - [[#disk][Disk]]
+    - [[#idle-inhibitor][Idle Inhibitor]]
     - [[#memory][Memory]]
     - [[#playerctl][Playerctl]]
     - [[#power-menu][Power Menu]]
@@ -522,7 +523,6 @@ killall waybar
     "position": "top", // Waybar position (top|bottom|left|right)
     // "height": 25, // Waybar height (to be removed for auto height)
     // "width": 1280, // Waybar width
-    // Choose the order of the modules
     "spacing": 4, // Gaps between modules (4px)
     "mode": "dock",
     "start_hidden": false,
@@ -538,6 +538,7 @@ killall waybar
     "modules-right": [
         "group/media-playing",
         "pulseaudio",
+        "idle_inhibitor",
         "custom/system76-power",
         "cpu",
         "memory",
@@ -604,7 +605,7 @@ window#waybar {
 
 .module,button {
     border-radius: 0px;
-    padding: 0px 3px;
+    padding: 0px 4px;
     font-size: 15px;
     font-family: Ubuntu Nerd Font;
     margin: 0px 0px;
@@ -797,7 +798,7 @@ fi
 #+BEGIN_SRC css :tangle waybar/style.css
 #tags button {
     background: transparent;
-    color: #44475a;
+    color: #6272a4;
 }
 #tags button.occupied {
     background: transparent;
@@ -844,6 +845,37 @@ fi
 }
 #+END_SRC
 
+*** Idle Inhibitor
+
+**** Configuration
+
+#+BEGIN_SRC jsonc :tangle waybar/config.jsonc
+    "idle_inhibitor": {
+        "format": "{icon}",
+        "format-icons": {
+            "activated": "󱄄 on",
+            "deactivated": "󰶐 off",
+        },
+        "tooltip": true,
+        "tooltip-format-activated": "Idle Inhibitor: {status}",
+        "tooltip-format-deactivated": "Idle Inhibitor: {status}",
+        "start-activated": false,
+    },
+#+END_SRC
+
+**** Styling
+
+#+BEGIN_SRC css :tangle waybar/style.css
+#idle_inhibitor.activated {
+    background: transparent;
+    color: #f1fa8c;
+}
+#idle_inhibitor.deactivated {
+    background: transparent;
+    color: #6272a4;
+}
+#+END_SRC
+
 *** Memory
 
 **** Configuration
@@ -851,7 +883,7 @@ fi
 #+BEGIN_SRC jsonc :tangle waybar/config.jsonc
     "memory": {
         "interval": 5,
-        "format": " {percentage}%",
+        "format": "  {percentage}%",
         "tooltip": true,
         "tooltip-format": "RAM:\n\tUsed: {used} GiB ({percentage}%)\n\tFree: {avail} GiB\n\tTotal: {total} GiB\nSwap:\n\tUsed: {swapUsed} GiB ({swapPercentage}%)\n\tFree: {swapAvail} GiB\n\tTotal: {swapTotal} GiB",
         "on-click-right": "kitty btop",

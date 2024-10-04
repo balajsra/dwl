@@ -4,7 +4,7 @@ window#waybar {
 
 .module,button {
     border-radius: 0px;
-    padding: 0px 3px;
+    padding: 0px 4px;
     font-size: 15px;
     font-family: Ubuntu Nerd Font;
     margin: 0px 0px;
@@ -44,7 +44,7 @@ window#waybar {
 
 #tags button {
     background: transparent;
-    color: #44475a;
+    color: #6272a4;
 }
 #tags button.occupied {
     background: transparent;
@@ -70,6 +70,15 @@ window#waybar {
 #disk {
     background: transparent;
     color: #f1fa8c;
+}
+
+#idle_inhibitor.activated {
+    background: transparent;
+    color: #f1fa8c;
+}
+#idle_inhibitor.deactivated {
+    background: transparent;
+    color: #6272a4;
 }
 
 #memory {

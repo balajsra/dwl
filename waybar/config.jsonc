@@ -6,7 +6,6 @@
     "position": "top", // Waybar position (top|bottom|left|right)
     // "height": 25, // Waybar height (to be removed for auto height)
     // "width": 1280, // Waybar width
-    // Choose the order of the modules
     "spacing": 4, // Gaps between modules (4px)
     "mode": "dock",
     "start_hidden": false,
@@ -22,6 +21,7 @@
     "modules-right": [
         "group/media-playing",
         "pulseaudio",
+        "idle_inhibitor",
         "custom/system76-power",
         "cpu",
         "memory",
@@ -174,9 +174,21 @@
         "on-click-right": "qdirstat",
     },
 
+    "idle_inhibitor": {
+        "format": "{icon}",
+        "format-icons": {
+            "activated": "󱄄 on",
+            "deactivated": "󰶐 off",
+        },
+        "tooltip": true,
+        "tooltip-format-activated": "Idle Inhibitor: {status}",
+        "tooltip-format-deactivated": "Idle Inhibitor: {status}",
+        "start-activated": false,
+    },
+
     "memory": {
         "interval": 5,
-        "format": " {percentage}%",
+        "format": "  {percentage}%",
         "tooltip": true,
         "tooltip-format": "RAM:\n\tUsed: {used} GiB ({percentage}%)\n\tFree: {avail} GiB\n\tTotal: {total} GiB\nSwap:\n\tUsed: {swapUsed} GiB ({swapPercentage}%)\n\tFree: {swapAvail} GiB\n\tTotal: {swapTotal} GiB",
         "on-click-right": "kitty btop",
