@@ -62,6 +62,9 @@ static const Layout layouts[] = {
 	{ "[]=",      tile },
 	{ "><>",      NULL },    /* no layout function means floating behavior */
 	{ "[M]",      monocle },
+#if GAPLESSGRID_PATCH
+	{ "###",      gaplessgrid },
+#endif // GAPLESSGRID_PATCH
 };
 
 /* monitors */
@@ -197,6 +200,9 @@ static const Key keys[] = {
 	{ MODKEY,                    XKB_KEY_t,          setlayout,      {.v = &layouts[0]} },
 	{ MODKEY,                    XKB_KEY_f,          setlayout,      {.v = &layouts[1]} },
 	{ MODKEY,                    XKB_KEY_m,          setlayout,      {.v = &layouts[2]} },
+#if GAPLESSGRID_PATCH
+	{ MODKEY,                    XKB_KEY_g,          setlayout,      {.v = &layouts[3]} },
+#endif // GAPLESSGRID_PATCH
 	{ MODKEY,                    XKB_KEY_space,      setlayout,      {0} },
 	{ MODKEY|WLR_MODIFIER_SHIFT, XKB_KEY_space,      togglefloating, {0} },
 	{ MODKEY,                    XKB_KEY_e,         togglefullscreen, {0} },

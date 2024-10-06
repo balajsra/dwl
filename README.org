@@ -12,6 +12,7 @@
     - [[#auto-start][Auto Start]]
     - [[#float-unfocused-border-color][Float Unfocused Border Color]]
     - [[#foreign-toplevel-management][Foreign Toplevel Management]]
+    - [[#gapless-grid][Gapless Grid]]
     - [[#ipc][IPC]]
     - [[#natural-scroll-trackpad][Natural Scroll Trackpad]]
     - [[#numlock-capslock][Numlock Capslock]]
@@ -127,6 +128,16 @@ Implement ~foreign-toplevel-management~, it add handlers for activate, close, fu
 
 #+BEGIN_SRC c :tangle patches.def.h
 #define FOREIGN_TOPLEVEL_MANAGEMENT_PATCH 1
+#+END_SRC
+
+*** [[https://codeberg.org/dwl/dwl-patches/src/branch/main/patches/gaplessgrid][Gapless Grid]]
+
+Arranges windows in a grid. Except it adjusts the number of windows in the first few columns to avoid empty cells.
+
+On widescreens (w > 2*h), it splits to three columns before splitting rows.
+
+#+BEGIN_SRC c :tangle patches.def.h
+#define GAPLESSGRID_PATCH 1
 #+END_SRC
 
 *** [[https://codeberg.org/dwl/dwl-patches/src/branch/main/patches/ipc][IPC]]
@@ -301,6 +312,9 @@ static const Layout layouts[] = {
 	{ "[]=",      tile },
 	{ "><>",      NULL },    /* no layout function means floating behavior */
 	{ "[M]",      monocle },
+#if GAPLESSGRID_PATCH
+	{ "###",      gaplessgrid },
+#endif // GAPLESSGRID_PATCH
 };
 #+END_SRC
 
@@ -453,6 +467,9 @@ static const Key keys[] = {
 	{ MODKEY,                    XKB_KEY_t,          setlayout,      {.v = &layouts[0]} },
 	{ MODKEY,                    XKB_KEY_f,          setlayout,      {.v = &layouts[1]} },
 	{ MODKEY,                    XKB_KEY_m,          setlayout,      {.v = &layouts[2]} },
+#if GAPLESSGRID_PATCH
+	{ MODKEY,                    XKB_KEY_g,          setlayout,      {.v = &layouts[3]} },
+#endif // GAPLESSGRID_PATCH
 	{ MODKEY,                    XKB_KEY_space,      setlayout,      {0} },
 	{ MODKEY|WLR_MODIFIER_SHIFT, XKB_KEY_space,      togglefloating, {0} },
 	{ MODKEY,                    XKB_KEY_e,         togglefullscreen, {0} },
