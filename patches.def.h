@@ -14,6 +14,8 @@
 
 #define IPC_PATCH 1
 
+#define MENU_PATCH 1
+
 #define MOVESTACK_PATCH 1
 
 #define NATURALSCROLLTRACKPAD_PATCH 1

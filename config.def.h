@@ -1,8 +1,8 @@
 /* Taken from https://github.com/djpohly/dwl/issues/466 */
 #define COLOR(hex)    { ((hex >> 24) & 0xFF) / 255.0f, \
-                        ((hex >> 16) & 0xFF) / 255.0f, \
-                        ((hex >> 8) & 0xFF) / 255.0f, \
-                        (hex & 0xFF) / 255.0f }
+						((hex >> 16) & 0xFF) / 255.0f, \
+						((hex >> 8) & 0xFF) / 255.0f, \
+						(hex & 0xFF) / 255.0f }
 /* appearance */
 static const int sloppyfocus               = 1;  /* focus follows mouse */
 static const int bypass_surface_visibility = 0;  /* 1 means idle inhibitors will disable idle tracking even if it's surface isn't visible  */
@@ -33,6 +33,14 @@ static const float fullscreen_bg[]         = {0.1f, 0.1f, 0.1f, 1.0f}; /* You ca
 /* logging */
 static int log_level = WLR_ERROR;
 
+#if MENU_PATCH
+static const Menu menus[] = {
+	/* command          feed function   action function */
+	{ "rofi -dmenu -i", menuwinfeed,    menuwinaction    },
+	{ "rofi -dmenu -i", menulayoutfeed, menulayoutaction },
+};
+#endif // MENU_PATCH
+
 #if SETUPENV_PATCH
 static const Env envs[] = {
 	/* variable			value */
@@ -43,8 +51,8 @@ static const Env envs[] = {
 /* Autostart */
 #if AUTOSTART_PATCH
 static const char *const autostart[] = {
-        "wbg", "/path/to/your/image", NULL,
-        NULL /* terminate */
+		"wbg", "/path/to/your/image", NULL,
+		NULL /* terminate */
 };
 #endif // AUTOSTART_PATCH
 
@@ -208,6 +216,10 @@ static const Key keys[] = {
 	{ MODKEY,                    XKB_KEY_g,          setlayout,      {.v = &layouts[3]} },
 #endif // GAPLESSGRID_PATCH
 	{ MODKEY,                    XKB_KEY_space,      setlayout,      {0} },
+#if MENU_PATCH
+	{ MODKEY|WLR_MODIFIER_SHIFT|WLR_MODIFIER_CTRL, XKB_KEY_p, menu,  {.v = &menus[0]} },
+	{ MODKEY|WLR_MODIFIER_SHIFT, XKB_KEY_P,          menu,           {.v = &menus[1]} },
+#endif // MENU_PATCH
 	{ MODKEY|WLR_MODIFIER_SHIFT, XKB_KEY_space,      togglefloating, {0} },
 	{ MODKEY,                    XKB_KEY_e,         togglefullscreen, {0} },
 #if FAKE_FULLSCREEN_CLIENT_PATCH

@@ -15,6 +15,7 @@
     - [[#foreign-toplevel-management][Foreign Toplevel Management]]
     - [[#gapless-grid][Gapless Grid]]
     - [[#ipc][IPC]]
+    - [[#menu][Menu]]
     - [[#move-stack][Move Stack]]
     - [[#natural-scroll-trackpad][Natural Scroll Trackpad]]
     - [[#numlock-capslock][Numlock Capslock]]
@@ -28,6 +29,7 @@
     - [[#appearance][Appearance]]
     - [[#tagging][Tagging]]
     - [[#logging][Logging]]
+    - [[#menu-1][Menu]]
     - [[#environment-variables][Environment Variables]]
     - [[#autostart][Autostart]]
     - [[#window-rules][Window Rules]]
@@ -162,6 +164,20 @@ Note to [[https://codeberg.org/dwl/dwl-patches/src/branch/main/patches/pertag][p
 #define IPC_PATCH 1
 #+END_SRC
 
+*** [[https://codeberg.org/dwl/dwl-patches/src/branch/main/patches/menu][Menu]]
+
+This patch adds ~menu~ command, which allows dwl to interface with dmenu-like programs.
+
+By default, two menus are available:
+- focusing a window by its title by pressing ~Alt+o~
+- selecting a layout from a list by pressing ~Alt+Shift+o~
+
+Edit ~menus~ array in ~config.h~ to add/change menus and use a different dmenu program.
+
+#+BEGIN_SRC c :tangle patches.def.h
+#define MENU_PATCH 1
+#+END_SRC
+
 *** [[https://codeberg.org/dwl/dwl-patches/src/branch/main/patches/movestack][Move Stack]]
 
 Allows you to move a window up and down the stack.
@@ -287,6 +303,18 @@ static const float fullscreen_bg[]         = {0.1f, 0.1f, 0.1f, 1.0f}; /* You ca
 
 #+BEGIN_SRC c :tangle config.h
 static int log_level = WLR_ERROR;
+#+END_SRC
+
+*** Menu
+
+#+BEGIN_SRC c :tangle config.h
+#if MENU_PATCH
+static const Menu menus[] = {
+	/* command          feed function   action function */
+	{ "rofi -dmenu -i", menuwinfeed,    menuwinaction    },
+	{ "rofi -dmenu -i", menulayoutfeed, menulayoutaction },
+};
+#endif // MENU_PATCH
 #+END_SRC
 
 *** Environment Variables
@@ -493,6 +521,10 @@ static const Key keys[] = {
 	{ MODKEY,                    XKB_KEY_g,          setlayout,      {.v = &layouts[3]} },
 #endif // GAPLESSGRID_PATCH
 	{ MODKEY,                    XKB_KEY_space,      setlayout,      {0} },
+#if MENU_PATCH
+	{ MODKEY|WLR_MODIFIER_SHIFT|WLR_MODIFIER_CTRL, XKB_KEY_p, menu,  {.v = &menus[0]} },
+	{ MODKEY|WLR_MODIFIER_SHIFT, XKB_KEY_P,          menu,           {.v = &menus[1]} },
+#endif // MENU_PATCH
 	{ MODKEY|WLR_MODIFIER_SHIFT, XKB_KEY_space,      togglefloating, {0} },
 	{ MODKEY,                    XKB_KEY_e,         togglefullscreen, {0} },
 #if FAKE_FULLSCREEN_CLIENT_PATCH
