@@ -162,7 +162,11 @@ typedef struct {
 #endif // XWAYLAND
 	unsigned int bw;
 	uint32_t tags;
+#if !FAKE_FULLSCREEN_CLIENT_PATCH
 	int isfloating, isurgent, isfullscreen;
+#else // FAKE_FULLSCREEN_CLIENT_PATCH
+	int isfloating, isurgent, isfullscreen, isfakefullscreen;
+#endif // FAKE_FULLSCREEN_CLIENT_PATCH
 	uint32_t resize; /* configure serial of a pending resize */
 } Client;
 
@@ -414,6 +418,9 @@ static void setcursor(struct wl_listener *listener, void *data);
 static void setcursorshape(struct wl_listener *listener, void *data);
 static void setfloating(Client *c, int floating);
 static void setfullscreen(Client *c, int fullscreen);
+#if FAKE_FULLSCREEN_CLIENT_PATCH
+static void setfakefullscreen(Client *c, int fullscreen);
+#endif // FAKE_FULLSCREEN_CLIENT_PATCH
 static void setgamma(struct wl_listener *listener, void *data);
 #if VANITYGAPS_PATCH
 static void setgaps(int oh, int ov, int ih, int iv);
@@ -434,6 +441,9 @@ static void togglebar(const Arg *arg);
 #endif // IPC_PATCH
 static void togglefloating(const Arg *arg);
 static void togglefullscreen(const Arg *arg);
+#if FAKE_FULLSCREEN_CLIENT_PATCH
+static void togglefakefullscreen(const Arg *arg);
+#endif // FAKE_FULLSCREEN_CLIENT_PATCH
 #if VANITYGAPS_PATCH
 static void togglegaps(const Arg *arg);
 #endif // VANITYGAPS_PATCH
@@ -3221,6 +3231,19 @@ setfullscreen(Client *c, int fullscreen)
 	printstatus();
 }
 
+#if FAKE_FULLSCREEN_CLIENT_PATCH
+void
+setfakefullscreen(Client *c, int fullscreen)
+{
+	c->isfakefullscreen = fullscreen;
+	if (!c->mon)
+		return;
+	if (c->isfullscreen)
+		setfullscreen(c, 0);
+	client_set_fullscreen(c, fullscreen);
+}
+#endif // FAKE_FULLSCREEN_CLIENT_PATCH
+
 void
 setgamma(struct wl_listener *listener, void *data)
 {
@@ -3724,6 +3747,16 @@ togglefullscreen(const Arg *arg)
 	if (sel)
 		setfullscreen(sel, !sel->isfullscreen);
 }
+
+#if FAKE_FULLSCREEN_CLIENT_PATCH
+void
+togglefakefullscreen(const Arg *arg)
+{
+	Client *sel = focustop(selmon);
+	if (sel)
+		setfakefullscreen(sel, !sel->isfakefullscreen);
+}
+#endif // FAKE_FULLSCREEN_CLIENT_PATCH
 
 #if VANITYGAPS_PATCH
 void

@@ -10,6 +10,7 @@
     - [[#always-center][Always Center]]
     - [[#attach-top][Attach Top]]
     - [[#auto-start][Auto Start]]
+    - [[#fake-fullscreen-client][Fake Fullscreen Client]]
     - [[#float-unfocused-border-color][Float Unfocused Border Color]]
     - [[#foreign-toplevel-management][Foreign Toplevel Management]]
     - [[#gapless-grid][Gapless Grid]]
@@ -111,6 +112,14 @@ Note: Commands from array are executed using execvp(). So if you need to execute
 
 #+BEGIN_SRC c :tangle patches.def.h
 #define AUTOSTART_PATCH 0
+#+END_SRC
+
+*** [[https://codeberg.org/dwl/dwl-patches/src/branch/main/patches/fakefullscreenclient][Fake Fullscreen Client]]
+
+Allow setting fake fullscreen per client
+
+#+BEGIN_SRC c :tangle patches.def.h
+#define FAKE_FULLSCREEN_CLIENT_PATCH 1
 #+END_SRC
 
 *** [[https://codeberg.org/dwl/dwl-patches/src/branch/main/patches/float-unfocused-border-color][Float Unfocused Border Color]]
@@ -486,6 +495,9 @@ static const Key keys[] = {
 	{ MODKEY,                    XKB_KEY_space,      setlayout,      {0} },
 	{ MODKEY|WLR_MODIFIER_SHIFT, XKB_KEY_space,      togglefloating, {0} },
 	{ MODKEY,                    XKB_KEY_e,         togglefullscreen, {0} },
+#if FAKE_FULLSCREEN_CLIENT_PATCH
+	{ MODKEY|WLR_MODIFIER_SHIFT, XKB_KEY_E,          togglefakefullscreen, {0} },
+#endif // FAKE_FULLSCREEN_CLIENT_PATCH
 	{ MODKEY,                    XKB_KEY_0,          view,           {.ui = ~0} },
 	{ MODKEY|WLR_MODIFIER_SHIFT, XKB_KEY_parenright, tag,            {.ui = ~0} },
 	{ MODKEY,                    XKB_KEY_comma,      focusmon,       {.i = WLR_DIRECTION_LEFT} },
