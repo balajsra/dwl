@@ -798,7 +798,7 @@ fi
 #+BEGIN_SRC css :tangle waybar/style.css
 #tags button {
     background: transparent;
-    color: #6272a4;
+    color: #44475a;
 }
 #tags button.occupied {
     background: transparent;
@@ -872,7 +872,7 @@ fi
 }
 #idle_inhibitor.deactivated {
     background: transparent;
-    color: #6272a4;
+    color: #44475a;
 }
 #+END_SRC
 
@@ -934,19 +934,19 @@ fi
 #+BEGIN_SRC css :tangle waybar/style.css
 #custom-media-playing-source {
     background: transparent;
-    color: #ff79c6;
+    color: #ff5555;
 }
 #custom-media-playing-prev {
     background: transparent;
-    color: #ff79c6;
+    color: #ff5555;
 }
 #custom-media-playing-play-pause {
     background: transparent;
-    color: #ff79c6;
+    color: #ff5555;
 }
 #custom-media-playing-next {
     background: transparent;
-    color: #ff79c6;
+    color: #ff5555;
 }
 #+END_SRC
 
@@ -1107,7 +1107,7 @@ echo '{"text":"'$mediaSourceIcon'","tooltip":"󰝚\t'$title'\r󰠃\t'$artist'\r�
 }
 #custom-power-menu-lock {
     background: transparent;
-    color: #bd93f9;
+    color: #ff79c6;
 }
 #custom-power-menu-logout {
     background: transparent;
@@ -1148,7 +1148,7 @@ echo '{"text":"'$mediaSourceIcon'","tooltip":"󰝚\t'$title'\r󰠃\t'$artist'\r�
 #+BEGIN_SRC css :tangle waybar/style.css
 #pulseaudio {
     background: transparent;
-    color: #bd93f9;
+    color: #ff79c6;
 }
 #+END_SRC
 

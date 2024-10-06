@@ -44,7 +44,7 @@ window#waybar {
 
 #tags button {
     background: transparent;
-    color: #6272a4;
+    color: #44475a;
 }
 #tags button.occupied {
     background: transparent;
@@ -78,7 +78,7 @@ window#waybar {
 }
 #idle_inhibitor.deactivated {
     background: transparent;
-    color: #6272a4;
+    color: #44475a;
 }
 
 #memory {
@@ -88,19 +88,19 @@ window#waybar {
 
 #custom-media-playing-source {
     background: transparent;
-    color: #ff79c6;
+    color: #ff5555;
 }
 #custom-media-playing-prev {
     background: transparent;
-    color: #ff79c6;
+    color: #ff5555;
 }
 #custom-media-playing-play-pause {
     background: transparent;
-    color: #ff79c6;
+    color: #ff5555;
 }
 #custom-media-playing-next {
     background: transparent;
-    color: #ff79c6;
+    color: #ff5555;
 }
 
 #custom-power-menu-launcher {
@@ -121,7 +121,7 @@ window#waybar {
 }
 #custom-power-menu-lock {
     background: transparent;
-    color: #bd93f9;
+    color: #ff79c6;
 }
 #custom-power-menu-logout {
     background: transparent;
@@ -130,7 +130,7 @@ window#waybar {
 
 #pulseaudio {
     background: transparent;
-    color: #bd93f9;
+    color: #ff79c6;
 }
 
 #custom-system76-power {
