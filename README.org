@@ -576,6 +576,7 @@ static const Button buttons[] = {
 killall waybar
 
 /usr/bin/waybar \
+    -l debug \
     -c $HOME/.config/dwl/waybar/config.jsonc \
     -s $HOME/.config/dwl/waybar/style.css &
 #+END_SRC
@@ -604,7 +605,9 @@ killall waybar
     "reload_style_on_change": true,
     "modules-left": [
         "group/power-menu",
-        "group/dwl",
+        "dwl/tags",
+        "dwl/window#title",
+        "dwl/window#layout",
     ],
     "modules-center": [
         "tray",
@@ -637,14 +640,6 @@ killall waybar
             "click-to-reveal": false,
         },
     },
-    "group/dwl": {
-        "orientation": "inherit",
-        "modules": [
-            "dwl/tags",
-            "dwl/window#title",
-            "dwl/window#layout",
-        ],
-    },
     "group/media-playing": {
         "orientation": "inherit",
         "modules": [
@@ -674,15 +669,32 @@ killall waybar
 
 #+BEGIN_SRC css :tangle waybar/style.css
 window#waybar {
+    background: transparent;
+}
+
+#window {
+    padding: 0px 0px;
+    color: transparent;
+    background: transparent;
+}
+
+widget {
     background: #282a36;
+    border-radius: 25px;
+}
+
+label.module {
+    padding: 0px 10px;
+}
+
+button {
+    border-radius: 0px;
+    padding: 0px 0px;
 }
 
 .module,button {
-    border-radius: 0px;
-    padding: 0px 4px;
     font-size: 15px;
     font-family: Ubuntu Nerd Font;
-    margin: 0px 0px;
 }
 #+END_SRC
 
@@ -810,21 +822,28 @@ window#waybar {
 **** Styling
 
 #+BEGIN_SRC css :tangle waybar/style.css
+box#dunst {
+    padding: 0px 10px;
+}
 #custom-dunst-status {
     background: transparent;
     color: #50fa7b;
+    padding: 0px 5px;
 }
 #custom-dunst-clear {
     background: transparent;
     color: #50fa7b;
+    padding: 0px 5px;
 }
 #custom-dunst-history-view {
     background: transparent;
     color: #50fa7b;
+    padding: 0px 5px;
 }
 #custom-dunst-history-clear {
     background: transparent;
     color: #50fa7b;
+    padding: 0px 5px;
 }
 #+END_SRC
 
@@ -870,9 +889,13 @@ fi
 **** Styling
 
 #+BEGIN_SRC css :tangle waybar/style.css
+#tags {
+    padding: 0px 10px;
+}
 #tags button {
     background: transparent;
     color: #44475a;
+    padding: 0px 5px;
 }
 #tags button.occupied {
     background: transparent;
@@ -889,10 +912,12 @@ fi
 #window.title {
     background: transparent;
     color: #f8f8f2;
+    padding: 0px 10px;
 }
 #window.layout {
     background: transparent;
     color: #50fa7b;
+    padding: 0px 10px;
 }
 #+END_SRC
 
@@ -1006,21 +1031,28 @@ fi
 **** Styling
 
 #+BEGIN_SRC css :tangle waybar/style.css
+box#media-playing {
+    padding: 0px 10px;
+}
 #custom-media-playing-source {
     background: transparent;
     color: #ff5555;
+    padding: 0px 5px;
 }
 #custom-media-playing-prev {
     background: transparent;
     color: #ff5555;
+    padding: 0px 5px;
 }
 #custom-media-playing-play-pause {
     background: transparent;
     color: #ff5555;
+    padding: 0px 5px;
 }
 #custom-media-playing-next {
     background: transparent;
     color: #ff5555;
+    padding: 0px 5px;
 }
 #+END_SRC
 
@@ -1163,29 +1195,38 @@ echo '{"text":"'$mediaSourceIcon'","tooltip":"󰝚\t'$title'\r󰠃\t'$artist'\r�
 **** Styling
 
 #+BEGIN_SRC css :tangle waybar/style.css
+box#power-menu {
+    padding: 0px 10px;
+}
 #custom-power-menu-launcher {
     background: transparent;
     color: #8be9fd;
+    padding: 0px 5px;
 }
 #custom-power-menu-shutdown {
     background: transparent;
     color: #ff5555;
+    padding: 0px 5px;
 }
 #custom-power-menu-reboot {
     background: transparent;
     color: #50fa7b;
+    padding: 0px 5px;
 }
 #custom-power-menu-sleep {
     background: transparent;
     color: #f1fa8c;
+    padding: 0px 5px;
 }
 #custom-power-menu-lock {
     background: transparent;
     color: #ff79c6;
+    padding: 0px 5px;
 }
 #custom-power-menu-logout {
     background: transparent;
     color: #ffb86c;
+    padding: 0px 5px;
 }
 #+END_SRC
 
@@ -1278,6 +1319,7 @@ echo '{"text":"󰢮 '$graphics'","tooltip":"󰢮\t'$graphics'\r󰐥\t'$graphicsP
 #+BEGIN_SRC css :tangle waybar/style.css
 #tray {
     background: transparent;
+    padding: 0px 10px;
 }
 #+END_SRC
 

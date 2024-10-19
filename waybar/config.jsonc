@@ -13,7 +13,9 @@
     "reload_style_on_change": true,
     "modules-left": [
         "group/power-menu",
-        "group/dwl",
+        "dwl/tags",
+        "dwl/window#title",
+        "dwl/window#layout",
     ],
     "modules-center": [
         "tray",
@@ -45,14 +47,6 @@
             "transition-left-to-right": true,
             "click-to-reveal": false,
         },
-    },
-    "group/dwl": {
-        "orientation": "inherit",
-        "modules": [
-            "dwl/tags",
-            "dwl/window#title",
-            "dwl/window#layout",
-        ],
     },
     "group/media-playing": {
         "orientation": "inherit",
