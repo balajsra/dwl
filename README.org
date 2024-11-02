@@ -866,7 +866,7 @@ fi
 #+BEGIN_SRC jsonc :tangle waybar/config.jsonc
     "dwl/tags": {
         "num-tags": 9,
-        "tag-labels": [ "󰍩 ₁", "󰠮 ₂", " ₃", "󰿎 ₄", "󰖟 ₅", " ₆", "󰊢 ₇", "󰊖 ₈", " ₉" ],
+        "tag-labels": [ "󰻧 ₁", "󰍩 ₂", "󰠮 ₃", " ₄", "󰖟 ₅", " ₆", "󰊢 ₇", "󰊖 ₈", " ₉" ],
         "disable-click": false
     },
     "dwl/window#title": {
