@@ -53,12 +53,22 @@ static const char *const autostart[] = {
 };
 #endif // AUTOSTART_PATCH
 
-/* NOTE: ALWAYS keep a rule declared even if you don't use rules (e.g leave at least one example) */
 static const Rule rules[] = {
-	/* app_id             title       tags mask     isfloating   monitor */
-	/* examples: */
-	{ "Gimp_EXAMPLE",     NULL,       0,            1,           -1 }, /* Start on currently visible tags floating, not tiled */
-	{ "firefox_EXAMPLE",  NULL,       1 << 8,       0,           -1 }, /* Start on ONLY tag "9" */
+	/* app_id                   title       tags mask     isfloating   monitor */
+	{ "thunderbird-esr",        NULL,       1 << 0,       0,           -1 }, /* Start on ONLY tag "1" */
+	{ "Beeper",                 NULL,       1 << 1,       0,           -1 }, /* Start on ONLY tag "2" */
+	{ "obsidian",               NULL,       1 << 2,       0,           -1 }, /* Start on ONLY tag "3" */
+	{ "pocket-casts-linux",     NULL,       1 << 3,       0,           -1 }, /* Start on ONLY tag "4" */
+	{ "Spotify",                NULL,       1 << 3,       0,           -1 }, /* Start on ONLY tag "4" */
+	{ "Vivaldi-stable",         NULL,       1 << 4,       0,           -1 }, /* Start on ONLY tag "5" */
+	{ "kitty",                  NULL,       1 << 5,       0,           -1 }, /* Start on ONLY tag "6" */
+	{ "Emacs",                  NULL,       1 << 6,       0,           -1 }, /* Start on ONLY tag "7" */
+	{ "steam",                  NULL,       1 << 7,       0,           -1 }, /* Start on ONLY tag "8" */
+	{ "lutris",                 NULL,       1 << 7,       0,           -1 }, /* Start on ONLY tag "8" */
+	{ "net.davidotek.pupgui2",  NULL,       1 << 7,       0,           -1 }, /* Start on ONLY tag "8" */
+	{ "gamescope",              NULL,       1 << 7,       0,           -1 }, /* Start on ONLY tag "8" */
+	{ "syncthing-gtk",          NULL,       1 << 8,       0,           -1 }, /* Start on ONLY tag "9" */
+	{ "openrgb",                NULL,       1 << 8,       0,           -1 }, /* Start on ONLY tag "9" */
 };
 
 static const Layout layouts[] = {
