@@ -30,4 +30,4 @@ else
         fi
 fi
 
-echo '{"text":"'$mediaSourceIcon'","tooltip":"󰝚\t'$title'\r󰠃\t'$artist'\r󰀥\t'$album'\r󰐎\t'$status'"}'
+echo '{"text":"'$mediaSourceIcon'","tooltip":"󰝚\t'${title//'"'/'\"'}'\r󰠃\t'${artist//'"'/'\"'}'\r󰀥\t'${album//'"'/'\"'}'\r󰐎\t'${status//'"'/'\"'}'"}'
