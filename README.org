@@ -595,11 +595,20 @@ static const Button buttons[] = {
 ** Launch Script
 
 #+BEGIN_SRC shell :shebang #!/usr/bin/env bash :tangle waybar/launch.sh
-killall waybar
+killall waybar || true
 
-/usr/bin/waybar \
-    -c $HOME/.config/dwl/waybar/config.jsonc \
-    -s $HOME/.config/dwl/waybar/style.css &
+until /usr/bin/waybar \
+    --config $HOME/.config/dwl/waybar/config.jsonc \
+    --style $HOME/.config/dwl/waybar/style.css;
+do
+    if [ $? -ne 143 ]; then
+        echo "Dwl Waybar stopped with exit code $?. Respawning..." >&2;
+        sleep 1;
+    else
+        echo "Dwl Waybar manually killed with SIGTERM";
+        break;
+    fi
+done
 #+END_SRC
 
 ** Start Configuration
@@ -979,7 +988,7 @@ fi
         "tooltip": true,
         "tooltip-format-activated": "Idle Inhibitor: {status}",
         "tooltip-format-deactivated": "Idle Inhibitor: {status}",
-        "start-activated": false,
+        "start-activated": true,
     },
 #+END_SRC
 

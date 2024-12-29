@@ -177,7 +177,7 @@
         "tooltip": true,
         "tooltip-format-activated": "Idle Inhibitor: {status}",
         "tooltip-format-deactivated": "Idle Inhibitor: {status}",
-        "start-activated": false,
+        "start-activated": true,
     },
 
     "memory": {
