@@ -61,7 +61,7 @@ static const Rule rules[] = {
 	{ "pocket-casts-linux",     NULL,       1 << 3,       0,           -1 }, /* Start on ONLY tag "4" */
 	{ "Spotify",                NULL,       1 << 3,       0,           -1 }, /* Start on ONLY tag "4" */
 	{ "Vivaldi-stable",         NULL,       1 << 4,       0,           -1 }, /* Start on ONLY tag "5" */
-	{ "kitty",                  NULL,       1 << 5,       0,           -1 }, /* Start on ONLY tag "6" */
+	{ "com.mitchellh.ghostty",  NULL,       1 << 5,       0,           -1 }, /* Start on ONLY tag "6" */
 	{ "Emacs",                  NULL,       1 << 6,       0,           -1 }, /* Start on ONLY tag "7" */
 	{ "steam",                  NULL,       1 << 7,       0,           -1 }, /* Start on ONLY tag "8" */
 	{ "lutris",                 NULL,       1 << 7,       0,           -1 }, /* Start on ONLY tag "8" */
@@ -170,7 +170,7 @@ static const enum libinput_config_tap_button_map button_map = LIBINPUT_CONFIG_TA
 /* helper for spawning shell commands in the pre dwm-5.0 fashion */
 #define SHCMD(cmd) { .v = (const char*[]){ "/bin/sh", "-c", cmd, NULL } }
 
-static const char *termcmd[]         = { "kitty", NULL };
+static const char *termcmd[]         = { "ghostty", NULL };
 static const char *menucmd[]         = { "rofi", "-show", "combi", NULL };
 
 static const Key keys[] = {
