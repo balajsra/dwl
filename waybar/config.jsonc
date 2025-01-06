@@ -84,7 +84,7 @@
         "interval": 5,
         "format": " {usage}%",
         "tooltip": true,
-        "on-click-right": "ghostty -e btop",
+        "on-click-right": "foot btop",
     },
 
     "clock": {
@@ -185,7 +185,7 @@
         "format": "  {percentage}%",
         "tooltip": true,
         "tooltip-format": "RAM:\n\tUsed: {used} GiB ({percentage}%)\n\tFree: {avail} GiB\n\tTotal: {total} GiB\nSwap:\n\tUsed: {swapUsed} GiB ({swapPercentage}%)\n\tFree: {swapAvail} GiB\n\tTotal: {swapTotal} GiB",
-        "on-click-right": "ghostty -e btop",
+        "on-click-right": "foot btop",
     },
 
     "custom/media-playing-source": {
