@@ -3356,7 +3356,7 @@ setfloating(Client *c, int floating)
 			(p && p->isfullscreen) ? LyrFS
 			: c->isfloating ? LyrFloat : LyrTile]);
 #if FLOAT_UNFOCUSED_BORDER_COLOR_PATCH
- 	if (!grabc && floating)
+	if (!grabc && floating)
 			for (int i = 0; i < 4; i++) {
 				wlr_scene_rect_set_color(c->border[i], floatcolor);
 				wlr_scene_node_lower_to_bottom(&c->border[i]->node);
